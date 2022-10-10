@@ -23,10 +23,12 @@ public:
   } 
 
   Location *get_vertex(int x, int y);
+  bool in_bounds(int x, int y);
   
-private:
   int16_t n;
   int16_t m;
+
+private:
   parlay::sequence<Location> vertices;
 };
 

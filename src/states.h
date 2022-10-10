@@ -2,12 +2,17 @@
 #include <cstdint>
 #include <string>
 #include <set>
+#include <map>
+
+enum Direction {
+  S, L, R, D, U
+};
 
 struct Position {
   int16_t x;
   int16_t y;
 
-  Position(int16_t x_, int16_t y_)
+  Position(int16_t x_ = 0, int16_t y_ = 0)
     : x(x_)
     , y(y_) 
   { }
@@ -21,10 +26,22 @@ struct Position {
   {
     return x != rhs.x || y != rhs.y;
   }
+
+  bool operator<(Position const &rhs) const
+  {
+    if (x < rhs.x) return true;
+    if (rhs.x < x) return false;
+    if (y < rhs.y) return true;
+    if (rhs.y < y) return false;
+    return false;
+  }
 };
 
 struct LocationState
 {
+  LocationState()  
+  { }
+
   LocationState(
     Position task_location_,
     bool is_task_ = false,
@@ -60,6 +77,7 @@ public:
 
 struct AgentState
 {
+  AgentState() {}
   AgentState(int16_t id_, Location &v_, double l_) 
   : core_state("None")
   , id(id_)
@@ -75,4 +93,8 @@ struct AgentState
   double angle;
   int travel_distance;
   Position starting_point;
+  LocationState *committed_task = nullptr;
+  LocationState *destination_task = nullptr;
 };
+
+typedef std::map<Position, Location *> LocalMapping;

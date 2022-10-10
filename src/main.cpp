@@ -1,12 +1,17 @@
-#include "agent.h"
 #include "map.h"
+#include "geo_utils.h"
+#include "parlay/random.h"
 #include "configuration.h"
 #include "parlay/sequence.h"
 
 using namespace parlay;
 
+parlay::random_generator rgen = parlay::random_generator();
+
 // run a small test case
-int main() {
+int
+main()
+{
   // constants
   int n = 5, m = 5;
   bool torus = false;
@@ -16,6 +21,7 @@ int main() {
   Position home_loc{1,2};
 
   Configuration config(n, m, torus);
+  config.get_vertex(home_loc.x, home_loc.y)->state = LocationState(Position{home_loc.x, home_loc.y}, false, true);
 
   parlay::sequence<LocationState> tasks;
   for (int i = 0; i < num_tasks; i++) {
@@ -24,7 +30,7 @@ int main() {
       task_loc = Position{(int16_t)(rand() % n), (int16_t)(rand() % m)};
     }
     config.set_task_vertex(task_loc);
-    tasks.emplace_back(task_loc, true, false, 1, 0);
+    tasks.emplace_back(task_loc, true, false, 1, 1);
   }
 
   for (int i = 0; i < total_demand - num_tasks; i++) {
@@ -43,13 +49,17 @@ int main() {
   }
   config.add_agents(agent_pos);
 
+  config.print_config();
+
   int total_rd = total_demand;
-  while (!config.all_tasks_completed()) {
+  while (total_rd > 0) {
     config.transition();
     total_rd = 0;
     for(int i = 0; i < num_tasks; i++) {
       total_rd += config.get_task(i)->state.residual_demand;
     }
+    config.print_config();
+    break;
   }
 
   return 0;
