@@ -35,7 +35,7 @@ public:
 private:
   int n;
   int m;
-  int influence_radius = 7;
+  int influence_radius = 10;
   bool torus;
   parlay::sequence<Position> task_vertices;
   parlay::sequence<Agent> agents;

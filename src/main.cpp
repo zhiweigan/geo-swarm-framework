@@ -13,11 +13,11 @@ int
 main()
 {
   // constants
-  int n = 5, m = 5;
+  int n = HEIGHT, m = WIDTH;
   bool torus = false;
-  int num_agents = 3;
-  int num_tasks = 2;
-  int total_demand = 3;
+  int num_agents = 10;
+  int num_tasks = 5;
+  int total_demand = 10;
   Position home_loc{1,2};
 
   Configuration config(n, m, torus);
@@ -52,6 +52,7 @@ main()
   config.print_config();
 
   int total_rd = total_demand;
+  int iter = 0;
   while (total_rd > 0) {
     config.transition();
     total_rd = 0;
@@ -59,7 +60,6 @@ main()
       total_rd += config.get_task(i)->state.residual_demand;
     }
     config.print_config();
-    break;
   }
 
   return 0;

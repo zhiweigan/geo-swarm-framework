@@ -1,5 +1,5 @@
 #pragma once
-#include <parlay/random.h>
+#include "parlay/random.h"
 #include <map>
 #include <cmath>
 #include <math.h>
@@ -41,10 +41,12 @@ inline Position get_coords_from_movement(Position pos, Direction dir, bool ignor
       pos.x = (pos.x + 1) % HEIGHT;
       return pos;
     case Direction::D:
-      pos.x = (pos.y - 1) % WIDTH;
+      pos.y = (pos.y - 1) % WIDTH;
       return pos;
     case Direction::U:
-      pos.x = (pos.y + 1) % WIDTH;
+      pos.y = (pos.y + 1) % WIDTH;
+      return pos;
+    case Direction::LAST:
       return pos;
   } 
 }
@@ -96,10 +98,9 @@ inline Direction get_direction_from_destination(Position dest, Position curr)
 {
   double best_dist = l2_distance(dest.x, dest.y, curr.x, curr.y);
   Direction best_dir = Direction::S;
-
-  for (int dirIter = Direction::S; dirIter != Direction::U; dirIter++)
+  for (int dirIter = Direction::S; dirIter != Direction::LAST; dirIter++)
   {
-    Direction dir = static_cast<Direction>(dir);
+    Direction dir = static_cast<Direction>(dirIter);
     Position new_loc = get_coords_from_movement(curr, dir);
     double new_dist = l2_distance(new_loc.x, new_loc.y, dest.x, dest.y);
     if (new_dist < best_dist) 

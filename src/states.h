@@ -1,11 +1,12 @@
 #pragma once
 #include <cstdint>
 #include <string>
+#include <iostream>
 #include <set>
 #include <map>
 
 enum Direction {
-  S, L, R, D, U
+  S, L, R, D, U, LAST
 };
 
 struct Position {
@@ -34,6 +35,12 @@ struct Position {
     if (y < rhs.y) return true;
     if (rhs.y < y) return false;
     return false;
+  }
+
+  friend std::ostream &operator<<(std::ostream &os, const Position &m)
+  {
+    os << "("<<m.x << ","<<m.y<<")";
+    return os;
   }
 };
 

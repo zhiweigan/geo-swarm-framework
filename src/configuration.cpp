@@ -55,12 +55,11 @@ LocalTransitory Configuration::delta(std::map<Position, Location *> local_mappin
 
   for (int agent_id : vtx->agents_seen)
   {
-    Agent agent = agents[agent_id];
-    AgentTransition transition = agent.generate_transition(local_mapping);
+    AgentTransition transition = agents[agent_id].generate_transition(local_mapping);
     proposed_vertex_states.insert_or_assign(agent_id, transition.lstate);
     proposed_agent_states.insert_or_assign(agent_id, ProposedAgentTransition{transition.astate, transition.dir});
   }
-  
+
   return task_claiming_resolution(proposed_vertex_states, proposed_agent_states, vtx);
 }
 
