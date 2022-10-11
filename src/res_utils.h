@@ -38,9 +38,9 @@ inline LocalTransitory task_claiming_resolution(
   int available_slots = vertex->state.residual_demand;
   for (auto const &[agent_id, update] : proposed_agent_updates)
   {
-    if (proposed_vertex_updates[agent_id].residual_demand == vertex->state.residual_demand - 1)
+    if (proposed_vertex_updates.at(agent_id).residual_demand == vertex->state.residual_demand - 1)
     {
-      attempted_claims += (vertex->state.residual_demand - proposed_vertex_updates[agent_id].residual_demand);
+      attempted_claims += (vertex->state.residual_demand - proposed_vertex_updates.at(agent_id).residual_demand);
       contenders.push_back(agent_id);
     }
   }
@@ -61,8 +61,8 @@ inline LocalTransitory task_claiming_resolution(
     }
     for (int i = available_slots; i < winners.size(); i++)
     {
-      proposed_agent_updates[winners[i]].astate.committed_task = nullptr;
-      new_proposed_agent_updates[winners[i]] = proposed_agent_updates[winners[i]];
+      proposed_agent_updates.at(winners[i]).astate.committed_task = nullptr;
+      new_proposed_agent_updates.insert_or_assign(winners[i], proposed_agent_updates[winners[i]]);
     }
     vertex->state.residual_demand = 0;
     return { vertex->state, new_proposed_agent_updates};

@@ -46,9 +46,6 @@ struct Position {
 
 struct LocationState
 {
-  LocationState()  
-  { }
-
   LocationState(
     Position task_location_,
     bool is_task_ = false,

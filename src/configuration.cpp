@@ -71,7 +71,7 @@ std::map<Position, LocalTransitory> Configuration::generate_global_transitory()
     for(int16_t y = 0; y < WIDTH; y++)
     {
       LocalMapping local_mapping = generate_local_mapping(*map.get_vertex(x,y), influence_radius, map);
-      transitory[{x, y}] = delta(local_mapping);
+      transitory.insert_or_assign(Position{x, y}, delta(local_mapping));
     }
   }
   return transitory;
