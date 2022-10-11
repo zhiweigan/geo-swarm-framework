@@ -1,3 +1,5 @@
+#include <chrono>
+
 #include "map.h"
 #include "geo_utils.h"
 #include "parlay/random.h"
@@ -14,13 +16,12 @@ main()
 {
   // constants
   int n = HEIGHT, m = WIDTH;
-  bool torus = false;
-  int num_agents = 10;
-  int num_tasks = 5;
-  int total_demand = 10;
+  int num_agents = NUM_AGENTS;
+  int num_tasks = NUM_TASKS;
+  int total_demand = TOTAL_DEMAND;
   Position home_loc{1,2};
 
-  Configuration config(n, m, torus);
+  Configuration config(n, m, true);
   config.get_vertex(home_loc.x, home_loc.y)->state = LocationState(Position{home_loc.x, home_loc.y}, false, true);
 
   parlay::sequence<LocationState> tasks;
@@ -49,18 +50,26 @@ main()
   }
   config.add_agents(agent_pos);
 
-  config.print_config();
-
   int total_rd = total_demand;
   int iter = 0;
+  std::cout<<"Starting simulation"<<std::endl;
+  auto t1 = std::chrono::high_resolution_clock::now();
   while (total_rd > 0) {
     config.transition();
     total_rd = 0;
     for(int i = 0; i < num_tasks; i++) {
       total_rd += config.get_task(i)->state.residual_demand;
     }
-    config.print_config();
+    iter++;
+    if (iter % 100 == 0)
+    {
+      std::cout<<"Iteration "<<iter<<std::endl;
+    }
   }
+  auto t2 = std::chrono::high_resolution_clock::now();
+  std::cout << "simulation took "
+            << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count()
+            << " milliseconds\n";
 
   return 0;
 }
