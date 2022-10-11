@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "parlay/sequence.h"
+#include <vector>
 #include "states.h"
 
 // TODO: defines an abstract class that is implemented by all map types
@@ -29,7 +29,7 @@ public:
   int16_t m;
 
 private:
-  parlay::sequence<Location> vertices;
+  std::vector<Location> vertices;
 };
 
 

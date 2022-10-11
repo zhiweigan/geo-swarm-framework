@@ -1,7 +1,6 @@
 #include "agent.h"
 #include "map.h"
 #include "states.h"
-#include "parlay/sequence.h"
 #include "constants.h"
 #include "res_utils.h"
 
@@ -14,8 +13,8 @@ public:
   , map(n_, m_) 
   { }
 
-  void add_agents(parlay::sequence<Position> &agent_pos);
-  void reset_agents(parlay::sequence<Position> &agent_pos);
+  void add_agents(std::vector<Position> &agent_pos);
+  void reset_agents(std::vector<Position> &agent_pos);
   void set_task_vertex(Position &pos);
   void execute_transition(std::map<Position, LocalTransitory> &transitory);
   void transition();
@@ -37,6 +36,6 @@ private:
   int m;
   int influence_radius = 10;
   bool torus;
-  parlay::sequence<Position> task_vertices;
-  parlay::sequence<Agent> agents;
+  std::vector<Position> task_vertices;
+  std::vector<Agent> agents;
 };

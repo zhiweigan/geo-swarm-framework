@@ -2,7 +2,7 @@
 #include "geo_utils.h"
 #include <set>
 
-void Configuration::add_agents(parlay::sequence<Position> &agent_pos) 
+void Configuration::add_agents(std::vector<Position> &agent_pos) 
 {
   int16_t id = 0;
   for (Position pos : agent_pos)
@@ -13,7 +13,7 @@ void Configuration::add_agents(parlay::sequence<Position> &agent_pos)
   }
 }
 
-void Configuration::reset_agents(parlay::sequence<Position> &agent_pos)
+void Configuration::reset_agents(std::vector<Position> &agent_pos)
 {
   for (int i = 0; i < n; i++) {
     for(int j = 0; j < m; j++) {

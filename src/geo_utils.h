@@ -1,5 +1,4 @@
 #pragma once
-#include "parlay/random.h"
 #include <map>
 #include <cmath>
 #include <math.h>
@@ -8,8 +7,6 @@
 #include "map.h"
 #include "states.h"
 #include "constants.h"
-
-extern parlay::random_generator rgen;
 
 inline std::map<Position, Location *> generate_local_mapping(Location &vtx, int influence_radius, BasicMap &map)
 {
@@ -77,7 +74,7 @@ inline Direction get_direction_from_angle(double angle, Position start, Position
   double x_closeness = abs(get_slope(start.x, start.y, move_x.x, move_x.x) - slope);
   double y_closeness = abs(get_slope(start.x, start.y, move_y.y, move_y.y) - slope);
   
-  if ((x_closeness < y_closeness || (x_closeness == y_closeness && rgen() % 2 == 0)) && xdir != 0) 
+  if ((x_closeness < y_closeness || (x_closeness == y_closeness && rand() % 2 == 0)) && xdir != 0) 
   {
     if (xdir > 0) return Direction::R;
     else return Direction::L;

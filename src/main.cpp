@@ -2,13 +2,7 @@
 
 #include "map.h"
 #include "geo_utils.h"
-#include "parlay/random.h"
 #include "configuration.h"
-#include "parlay/sequence.h"
-
-using namespace parlay;
-
-parlay::random_generator rgen = parlay::random_generator();
 
 // run a small test case
 int
@@ -24,7 +18,7 @@ main()
   Configuration config(n, m, true);
   config.get_vertex(home_loc.x, home_loc.y)->state = LocationState(Position{home_loc.x, home_loc.y}, false, true);
 
-  parlay::sequence<LocationState> tasks;
+  std::vector<LocationState > tasks;
   for (int i = 0; i < num_tasks; i++) {
     Position task_loc{(int16_t)(rand() % n), (int16_t)(rand() % m)};
     while (task_loc == home_loc) {
@@ -44,7 +38,7 @@ main()
     config.map.get_vertex(task.task_location.x, task.task_location.y)->state = std::move(task);
   }
 
-  parlay::sequence<Position> agent_pos;
+  std::vector<Position> agent_pos;
   for (int i = 0; i < num_agents; i++) {
     agent_pos.emplace_back(home_loc.x, home_loc.y);
   }

@@ -1,7 +1,7 @@
 #pragma once
 #include "states.h"
-#include "parlay/random.h"
 #include <algorithm>
+#include <random>
 
 struct ProposedAgentTransition
 {
@@ -34,14 +34,14 @@ inline LocalTransitory task_claiming_resolution(
   }
 
   int attempted_claims = 0;
-  std::vector<uint16_t> contenders;
+  std::vector<uint16_t> winners;
   int available_slots = vertex->state.residual_demand;
   for (auto const &[agent_id, update] : proposed_agent_updates)
   {
     if (proposed_vertex_updates.at(agent_id).residual_demand == vertex->state.residual_demand - 1)
     {
       attempted_claims += (vertex->state.residual_demand - proposed_vertex_updates.at(agent_id).residual_demand);
-      contenders.push_back(agent_id);
+      winners.push_back(agent_id);
     }
   }
 
@@ -53,8 +53,8 @@ inline LocalTransitory task_claiming_resolution(
   else
   {
     std::map<int16_t, ProposedAgentTransition> new_proposed_agent_updates;
-    parlay::sequence<uint16_t> winners = parlay::random_shuffle(contenders);
-    
+    shuffle(winners.begin(), winners.end(), std::default_random_engine(0));
+
     for (int i = 0; i < available_slots; i++)
     {
       new_proposed_agent_updates.insert_or_assign(winners[i], proposed_agent_updates[winners[i]]);
