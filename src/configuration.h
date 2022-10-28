@@ -17,13 +17,13 @@ public:
   void add_agents(std::vector<Position> &agent_pos);
   void reset_agents(std::vector<Position> &agent_pos);
   void set_task_vertex(Position &pos);
-  void execute_transition(std::map<Position, LocalTransitory> &transitory);
+  void execute_transition();
   void transition();
   bool all_agents_terminated();
   bool all_tasks_completed();
 
-  std::map<Position, LocalTransitory> generate_global_transitory();
-  LocalTransitory delta(std::map<Position, Location *> local_mapping);
+  void generate_global_transitory();
+  void delta(std::map<Position, Location *> local_mapping);
 
   void print_config(int time = 0);
 
