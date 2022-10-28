@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 #include <set>
-#include <map>
+#include <unordered_map>
 
 enum Direction {
   S, L, R, D, U, LAST
@@ -43,6 +43,19 @@ struct Position {
     return os;
   }
 };
+
+namespace std
+{
+  template <>
+  struct hash<Position>
+  {
+    inline size_t operator()(const Position &pos) const
+    {
+      // cantor's enumeration of pairs
+      return ((pos.x + pos.y) * (pos.x + pos.y + 1) / 2) + pos.y;
+    }
+  };
+}
 
 struct LocationState
 {
@@ -101,4 +114,4 @@ struct AgentState
   LocationState *destination_task = nullptr;
 };
 
-typedef std::map<Position, Location *> LocalMapping;
+typedef std::unordered_map<Position, Location *> LocalMapping;

@@ -13,16 +13,17 @@ public:
   , map(n_, m_) 
   { }
 
+  void init();
   void add_agents(std::vector<Position> &agent_pos);
   void reset_agents(std::vector<Position> &agent_pos);
   void set_task_vertex(Position &pos);
-  void execute_transition(std::map<Position, LocalTransitory> &transitory);
+  void execute_transition(std::unordered_map<Position, LocalTransitory> &transitory);
   void transition();
   bool all_agents_terminated();
   bool all_tasks_completed();
 
-  std::map<Position, LocalTransitory> generate_global_transitory();
-  LocalTransitory delta(std::map<Position, Location *> local_mapping);
+  std::unordered_map<Position, LocalTransitory> generate_global_transitory();
+  LocalTransitory delta(std::unordered_map<Position, Location *> local_mapping);
 
   void print_config(int time = 0);
 
@@ -38,4 +39,5 @@ private:
   bool torus;
   std::vector<Position> task_vertices;
   std::vector<Agent> agents;
+  std::unordered_map<Position, LocalMapping> local_mappings;
 };

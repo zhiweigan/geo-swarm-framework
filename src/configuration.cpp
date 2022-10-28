@@ -2,6 +2,18 @@
 #include "geo_utils.h"
 #include <set>
 
+void Configuration::init()
+{
+  for (int16_t x = 0; x < HEIGHT; x++)
+  {
+    for (int16_t y = 0; y < WIDTH; y++)
+    {
+      LocalMapping local_mapping = generate_local_mapping(*map.get_vertex(x, y), influence_radius, map);
+      local_mappings.insert_or_assign(Position{x, y}, local_mapping);
+    }
+  }
+}
+
 void Configuration::add_agents(std::vector<Position> &agent_pos) 
 {
   int16_t id = 0;
@@ -23,7 +35,7 @@ void Configuration::reset_agents(std::vector<Position> &agent_pos)
   add_agents(agent_pos);
 }
 
-void Configuration::execute_transition(std::map<Position, LocalTransitory> &transitory)
+void Configuration::execute_transition(std::unordered_map<Position, LocalTransitory> &transitory)
 {
   for (auto &[pos, delta] : transitory)
   {
@@ -42,7 +54,7 @@ void Configuration::execute_transition(std::map<Position, LocalTransitory> &tran
   }
 }
 
-LocalTransitory Configuration::delta(std::map<Position, Location *> local_mapping)
+LocalTransitory Configuration::delta(std::unordered_map<Position, Location *> local_mapping)
 {
   Location* vtx = local_mapping[{0, 0}];
   if (vtx->agents_seen.size() == 0)
@@ -50,8 +62,8 @@ LocalTransitory Configuration::delta(std::map<Position, Location *> local_mappin
     return {vtx->state, {}};
   }
 
-  std::map<int16_t, LocationState> proposed_vertex_states;
-  std::map<int16_t, ProposedAgentTransition> proposed_agent_states;
+  std::unordered_map<int16_t, LocationState> proposed_vertex_states;
+  std::unordered_map<int16_t, ProposedAgentTransition> proposed_agent_states;
 
   for (int agent_id : vtx->agents_seen)
   {
@@ -63,15 +75,14 @@ LocalTransitory Configuration::delta(std::map<Position, Location *> local_mappin
   return task_claiming_resolution(proposed_vertex_states, proposed_agent_states, vtx);
 }
 
-std::map<Position, LocalTransitory> Configuration::generate_global_transitory()
+std::unordered_map<Position, LocalTransitory> Configuration::generate_global_transitory()
 {
-  std::map<Position, LocalTransitory> transitory;
+  std::unordered_map<Position, LocalTransitory> transitory;
   for (int16_t x = 0; x < HEIGHT; x++)
   {
     for(int16_t y = 0; y < WIDTH; y++)
     {
-      LocalMapping local_mapping = generate_local_mapping(*map.get_vertex(x,y), influence_radius, map);
-      transitory.insert_or_assign(Position{x, y}, delta(local_mapping));
+      transitory.insert_or_assign(Position{x, y}, delta(local_mappings[Position{x, y}]));
     }
   }
   return transitory;
@@ -80,7 +91,7 @@ std::map<Position, LocalTransitory> Configuration::generate_global_transitory()
 void
 Configuration::transition()
 {
-  std::map<Position, LocalTransitory> global_transitory = generate_global_transitory();
+  std::unordered_map<Position, LocalTransitory> global_transitory = generate_global_transitory();
   execute_transition(global_transitory);
 }
 

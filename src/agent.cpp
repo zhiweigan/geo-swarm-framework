@@ -1,7 +1,7 @@
 #include "agent.h"
 #include "states.h"
 #include "geo_utils.h"
-#include <map>
+#include <unordered_map>
 #include <climits>
 
 LocationState *Agent::find_nearby_task(LocalMapping &local_mapping)
