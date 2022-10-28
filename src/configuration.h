@@ -34,7 +34,7 @@ public:
 private:
   int n;
   int m;
-  int influence_radius = 10;
+  int influence_radius = 2;
   bool torus;
   std::vector<Position> task_vertices;
   std::vector<Agent> agents;
