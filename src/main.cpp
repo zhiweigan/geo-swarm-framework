@@ -16,6 +16,7 @@ main()
   Position home_loc{1,2};
 
   Configuration config(n, m, true);
+  config.init();
   config.get_vertex(home_loc.x, home_loc.y)->state = LocationState(Position{home_loc.x, home_loc.y}, false, true);
 
   std::vector<LocationState > tasks;
@@ -59,7 +60,7 @@ main()
     {
       std::cout<<"Iteration "<<iter<<std::endl;
     }
-    config.print_config(iter);
+    // config.print_config(iter);
   }
   auto t2 = std::chrono::high_resolution_clock::now();
   std::cout << "simulation took "

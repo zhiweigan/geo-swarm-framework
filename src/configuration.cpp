@@ -2,6 +2,18 @@
 #include "geo_utils.h"
 #include <set>
 
+void Configuration::init()
+{
+  for (int16_t x = 0; x < HEIGHT; x++)
+  {
+    for (int16_t y = 0; y < WIDTH; y++)
+    {
+      LocalMapping local_mapping = generate_local_mapping(*map.get_vertex(x, y), influence_radius, map);
+      local_mappings.insert_or_assign(Position{x, y}, local_mapping);
+    }
+  }
+}
+
 void Configuration::add_agents(std::vector<Position> &agent_pos) 
 {
   int16_t id = 0;
@@ -70,8 +82,7 @@ std::map<Position, LocalTransitory> Configuration::generate_global_transitory()
   {
     for(int16_t y = 0; y < WIDTH; y++)
     {
-      LocalMapping local_mapping = generate_local_mapping(*map.get_vertex(x,y), influence_radius, map);
-      transitory.insert_or_assign(Position{x, y}, delta(local_mapping));
+      transitory.insert_or_assign(Position{x, y}, delta(local_mappings[Position{x, y}]));
     }
   }
   return transitory;

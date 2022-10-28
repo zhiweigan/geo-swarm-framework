@@ -13,6 +13,7 @@ public:
   , map(n_, m_) 
   { }
 
+  void init();
   void add_agents(std::vector<Position> &agent_pos);
   void reset_agents(std::vector<Position> &agent_pos);
   void set_task_vertex(Position &pos);
@@ -38,4 +39,5 @@ private:
   bool torus;
   std::vector<Position> task_vertices;
   std::vector<Agent> agents;
+  std::map<Position, LocalMapping> local_mappings;
 };
