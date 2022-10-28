@@ -65,12 +65,12 @@ AgentTransition Agent::generate_transition(LocalMapping &local_mapping)
     if (nearby_task)
     {
       new_astate.destination_task = nearby_task;
-      return {loc->state, new_astate, Direction::S};
+      return {loc->state, std::move(new_astate), Direction::S};
     }
     else
     {
       Direction new_dir = get_travel_direction(new_astate);
-      return {loc->state, new_astate, new_dir};
+      return {loc->state, std::move(new_astate), std::move(new_dir)};
     }
   }
   if (state.destination_task)
@@ -86,13 +86,13 @@ AgentTransition Agent::generate_transition(LocalMapping &local_mapping)
       new_astate.destination_task = nullptr;
       LocationState new_vstate = loc->state;
       new_vstate.residual_demand -= 1;
-      return {new_vstate, new_astate, Direction::S};
+      return {new_vstate, std::move(new_astate), Direction::S};
     }
     else
     {
       Direction new_direction = get_direction_from_destination(state.destination_task->task_location, loc->loc);
       Position new_location = get_coords_from_movement(loc->loc, new_direction);
-      return {loc->state, new_astate, new_direction};
+      return {loc->state, std::move(new_astate), std::move(new_direction)};
     }
   }
   else

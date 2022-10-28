@@ -82,7 +82,7 @@ std::map<Position, LocalTransitory> Configuration::generate_global_transitory()
   {
     for(int16_t y = 0; y < WIDTH; y++)
     {
-      transitory.insert_or_assign(Position{x, y}, delta(local_mappings[Position{x, y}]));
+      transitory.insert_or_assign(Position{x, y}, std::move(delta(local_mappings[Position{x, y}])));
     }
   }
   return transitory;
@@ -115,7 +115,7 @@ Location* Configuration::get_vertex(int x, int y)
   return map.get_vertex(x, y);
 }
 
-Location* Configuration::get_task(int i)
+ Location* Configuration::get_task(int i)
 {
   return map.get_vertex(task_vertices[i].x, task_vertices[i].y);
 }
