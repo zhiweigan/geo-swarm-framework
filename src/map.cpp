@@ -6,7 +6,7 @@ Location* BasicMap::get_vertex(int x, int y)
 }
 
 void BasicMap::set_transition(int x, int y, LocalTransitory &&transition){
-  transitions[x * m + y] = transition;
+  transitions[x * m + y] = std::move(transition);
 }
 
 LocalTransitory *BasicMap::get_transition(int x, int y)
