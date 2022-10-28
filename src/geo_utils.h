@@ -46,6 +46,7 @@ inline Position get_coords_from_movement(Position pos, Direction dir, bool ignor
     case Direction::LAST:
       return pos;
   } 
+  return pos;
 }
 
 inline double get_slope(int x1, int y1, int x2, int y2)

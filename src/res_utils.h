@@ -36,11 +36,11 @@ inline LocalTransitory task_claiming_resolution(
   int attempted_claims = 0;
   std::vector<uint16_t> winners;
   int available_slots = vertex->state.residual_demand;
-  for (auto const &[agent_id, update] : proposed_agent_updates)
+  for (auto const &[agent_id, loc_state] : proposed_vertex_updates)
   {
-    if (proposed_vertex_updates.at(agent_id).residual_demand == vertex->state.residual_demand - 1)
+    if (loc_state.residual_demand == vertex->state.residual_demand - 1)
     {
-      attempted_claims += (vertex->state.residual_demand - proposed_vertex_updates.at(agent_id).residual_demand);
+      attempted_claims += (vertex->state.residual_demand - loc_state.residual_demand);
       winners.push_back(agent_id);
     }
   }
@@ -59,7 +59,7 @@ inline LocalTransitory task_claiming_resolution(
     {
       new_proposed_agent_updates.insert_or_assign(winners[i], proposed_agent_updates[winners[i]]);
     }
-    for (int i = available_slots; i < winners.size(); i++)
+    for (uint i = available_slots; i < winners.size(); i++)
     {
       proposed_agent_updates.at(winners[i]).astate.committed_task = nullptr;
       new_proposed_agent_updates.insert_or_assign(winners[i], proposed_agent_updates[winners[i]]);
