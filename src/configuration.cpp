@@ -58,7 +58,7 @@ void Configuration::execute_transition()
   }
 }
 
-void Configuration::delta(std::map<Position, Location *> local_mapping)
+void Configuration::delta(std::map<Position, Location *> &local_mapping)
 {
   Location *vtx = local_mapping[{0, 0}];
   if (vtx->agents_seen.size() == 0)

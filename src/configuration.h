@@ -23,7 +23,7 @@ public:
   bool all_tasks_completed();
 
   void generate_global_transitory();
-  void delta(std::map<Position, Location *> local_mapping);
+  void delta(std::map<Position, Location *> &local_mapping);
 
   void print_config(int time = 0);
 
