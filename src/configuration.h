@@ -6,10 +6,9 @@
 
 class Configuration {
 public:
-  Configuration(int n_, int m_, bool torus_)
+  Configuration(int n_, int m_)
   : n(n_)
   , m(m_)
-  , torus(torus_)
   , map(n_, m_) 
   { }
 
@@ -30,13 +29,12 @@ public:
   Location* get_vertex(int x, int y);
   Location* get_task(int i);
 
+  int n;
+  int m;
   BasicMap map;
 
 private:
-  int n;
-  int m;
   int influence_radius = 2;
-  bool torus;
   std::vector<Position> task_vertices;
   std::vector<Agent> agents;
   std::map<Position, LocalMapping> local_mappings;

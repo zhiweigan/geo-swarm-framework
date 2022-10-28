@@ -15,7 +15,7 @@ main()
   int total_demand = TOTAL_DEMAND;
   Position home_loc{1,2};
 
-  Configuration config(n, m, true);
+  Configuration config(n, m);
   config.init();
   config.get_vertex(home_loc.x, home_loc.y)->state = LocationState(Position{home_loc.x, home_loc.y}, false, true);
 

@@ -65,6 +65,7 @@ void Configuration::delta(std::map<Position, Location *> &local_mapping)
   {
     LocalTransitory transition{vtx->state, {}};
     map.set_transition(vtx->loc.x, vtx->loc.y, std::move(transition));
+    return;
   }
 
   std::map<int16_t, LocationState> proposed_vertex_states;
@@ -77,7 +78,7 @@ void Configuration::delta(std::map<Position, Location *> &local_mapping)
     proposed_agent_states.insert_or_assign(agent_id, ProposedAgentTransition{transition.astate, transition.dir});
   }
 
-  map.set_transition(vtx->loc.x, vtx->loc.y, std::move(task_claiming_resolution(proposed_vertex_states, proposed_agent_states, vtx)));
+  map.set_transition(vtx->loc.x, vtx->loc.y, task_claiming_resolution(proposed_vertex_states, proposed_agent_states, vtx));
 }
 
 void Configuration::generate_global_transitory()

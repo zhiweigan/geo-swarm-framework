@@ -91,7 +91,6 @@ AgentTransition Agent::generate_transition(LocalMapping &local_mapping)
     else
     {
       Direction new_direction = get_direction_from_destination(state.destination_task->task_location, loc->loc);
-      Position new_location = get_coords_from_movement(loc->loc, new_direction);
       return {loc->state, std::move(new_astate), std::move(new_direction)};
     }
   }
