@@ -1,10 +1,11 @@
 #include "agent.h"
 #include "states.h"
 #include "geo_utils.h"
+#include "parlay/random.h"
 #include <map>
 #include <climits>
 
-Location *Agent::find_nearby_task(LocalMapping &local_mapping)
+Location * Agent::find_nearby_task(LocalMapping &local_mapping)
 {
   Location *return_state = nullptr;
   Position origin = local_mapping[Position{0, 0}]->loc;
@@ -40,7 +41,7 @@ Direction Agent::get_travel_direction(AgentState &new_agent_state)
   if (state.travel_distance <= 0)
   {
     new_agent_state.travel_distance = abs(loc->loc.x - state.starting_point.x) + abs(loc->loc.y - state.starting_point.y);
-    new_agent_state.angle = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (2.0 * M_PI)));
+    new_agent_state.angle = static_cast<float>(rgen()) / (static_cast<float>(RAND_MAX / (2.0 * M_PI)));
     new_agent_state.starting_point = Position{loc->loc.x, loc->loc.y};
   }
 
@@ -49,7 +50,7 @@ Direction Agent::get_travel_direction(AgentState &new_agent_state)
 
   while (!within_site(new_location.x, new_location.y))
   {
-    new_agent_state.angle = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (2.0 * M_PI)));
+    new_agent_state.angle = static_cast<float>(rgen()) / (static_cast<float>(RAND_MAX / (2.0 * M_PI)));
     new_agent_state.starting_point = Position{loc->loc.x, loc->loc.y};
     new_direction = get_direction_from_angle(new_agent_state.angle, new_agent_state.starting_point, Position{loc->loc.x, loc->loc.y});
     new_location = get_coords_from_movement(Position{loc->loc.x, loc->loc.y}, new_direction, true);
