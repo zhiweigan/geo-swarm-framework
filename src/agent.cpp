@@ -7,12 +7,13 @@
 Location *Agent::find_nearby_task(LocalMapping &local_mapping)
 {
   Location *return_state = nullptr;
+  Position origin = local_mapping[Position{0, 0}]->loc;
   double min_dist = __DBL_MAX__;
   for (auto & [pos, vtx] : local_mapping)
   {
     if (vtx->state.is_task && vtx->state.residual_demand > 0)
     {
-      double dist = l2_distance(vtx->loc.x, vtx->loc.y, vtx->loc.x + pos.x, vtx->loc.y + pos.y);
+      double dist = l2_distance(origin.x, origin.y, vtx->loc.x, vtx->loc.y);
       if (dist < min_dist)
       {
         min_dist = dist;
