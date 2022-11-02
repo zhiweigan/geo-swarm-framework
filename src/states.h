@@ -97,8 +97,8 @@ struct AgentState
   double angle;
   int travel_distance;
   Position starting_point;
-  LocationState *committed_task = nullptr;
-  LocationState *destination_task = nullptr;
+  Location *committed_task = nullptr;
+  Location *destination_task = nullptr;
 };
 
 typedef std::map<Position, Location *> LocalMapping;
