@@ -14,6 +14,7 @@ main()
   int num_tasks = NUM_TASKS;
   int total_demand = TOTAL_DEMAND;
   Position home_loc{1,2};
+  srand(0);
 
   Configuration config(n, m);
   config.init();

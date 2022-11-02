@@ -1,5 +1,6 @@
 #include "configuration.h"
 #include "geo_utils.h"
+#include "parlay/parallel.h"
 #include <set>
 
 void Configuration::init()
@@ -83,13 +84,13 @@ void Configuration::delta(std::map<Position, Location *> &local_mapping)
 
 void Configuration::generate_global_transitory()
 {
-  for (int16_t x = 0; x < HEIGHT; x++)
+  parlay::parallel_for(0, HEIGHT, [&](int16_t x)
   {
     for (int16_t y = 0; y < WIDTH; y++)
     {
       delta(local_mappings[Position{x, y}]);
-    }
-  }
+    } 
+  });
 }
 
 void
