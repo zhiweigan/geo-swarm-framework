@@ -60,7 +60,7 @@ main()
     {
       std::cout<<"Iteration "<<iter<<std::endl;
     }
-    // config.print_config(iter);
+    config.print_config(iter);
   }
   auto t2 = std::chrono::high_resolution_clock::now();
   std::cout << "simulation took "

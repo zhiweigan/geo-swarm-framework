@@ -100,6 +100,8 @@ inline Direction get_direction_from_destination(Position dest, Position curr)
   {
     Direction dir = static_cast<Direction>(dirIter);
     Position new_loc = get_coords_from_movement(curr, dir);
+    std::cout<<dest.x<<" "<<dest.y<<" "<<new_loc.x<<" "<<new_loc.y<<std::endl; 
+    if (dest.x > 30) exit(0);
     double new_dist = l2_distance(new_loc.x, new_loc.y, dest.x, dest.y);
     if (new_dist < best_dist) 
     {

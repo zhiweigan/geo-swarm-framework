@@ -45,6 +45,11 @@ void Configuration::execute_transition()
       Location *vtx = map.get_vertex(i, j);
       vtx->state = delta->loc_state;
 
+      if (vtx->state.task_location.x > 30 || vtx->state.task_location.y > 30) {
+      	std::cout<<"HERE"<<std::endl;
+	exit(0);
+      }
+
       for (auto const &[agent_id, update] : delta->agent_updates)
       {
         Agent *agent = &agents[agent_id];
@@ -64,7 +69,7 @@ void Configuration::delta(std::map<Position, Location *> &local_mapping)
   if (vtx->agents_seen.size() == 0)
   {
     LocalTransitory transition{vtx->state, {}};
-    map.set_transition(vtx->loc.x, vtx->loc.y, std::move(transition));
+    map.set_transition(vtx->loc.x, vtx->loc.y, transition);
     return;
   }
 

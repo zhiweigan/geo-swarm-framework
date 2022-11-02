@@ -25,7 +25,7 @@ public:
   } 
 
   Location* get_vertex(int x, int y);
-  void set_transition(int x, int y, LocalTransitory &&transition);
+  void set_transition(int x, int y, LocalTransitory transition);
   LocalTransitory* get_transition(int x, int y);
 
   bool in_bounds(int x, int y);
