@@ -18,8 +18,8 @@ inline std::map<Position, Location *> generate_local_mapping(Location &vtx, int 
   {
     for (int16_t dy = -influence_radius; dy <= influence_radius; dy++)
     {
-      int nvx = (vx + dx) % HEIGHT;
-      int nvy = (vy + dy) % WIDTH;
+      int nvx = ((vx + dx) % HEIGHT + HEIGHT) % HEIGHT;
+      int nvy = ((vy + dy) % WIDTH + WIDTH) % WIDTH;
       ret_map.insert(std::make_pair(Position{dx, dy}, map.get_vertex(nvx, nvy)));
     }
   }
