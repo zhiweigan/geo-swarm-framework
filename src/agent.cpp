@@ -4,11 +4,11 @@
 #include <map>
 #include <climits>
 
-LocationState *Agent::find_nearby_task(LocalMapping &local_mapping)
+Location *Agent::find_nearby_task(LocalMapping &local_mapping)
 {
-  LocationState *return_state = nullptr;
+  Location *return_state = nullptr;
   double min_dist = __DBL_MAX__;
-  for (auto const & [pos, vtx] : local_mapping)
+  for (auto & [pos, vtx] : local_mapping)
   {
     if (vtx->state.is_task && vtx->state.residual_demand > 0)
     {
@@ -16,7 +16,7 @@ LocationState *Agent::find_nearby_task(LocalMapping &local_mapping)
       if (dist < min_dist)
       {
         min_dist = dist;
-        return_state = &vtx->state;
+        return_state = vtx;
       }
     }
   }
@@ -61,7 +61,7 @@ AgentTransition Agent::generate_transition(LocalMapping &local_mapping)
   AgentState new_astate = state;
   if (!state.committed_task && !state.destination_task)
   {
-    LocationState* nearby_task = find_nearby_task(local_mapping);
+    Location* nearby_task = find_nearby_task(local_mapping);
     if (nearby_task)
     {
       new_astate.destination_task = nearby_task;
@@ -75,12 +75,12 @@ AgentTransition Agent::generate_transition(LocalMapping &local_mapping)
   }
   if (state.destination_task)
   {
-    if (state.destination_task->residual_demand == 0)
+    if (state.destination_task->state.residual_demand == 0)
     {
       new_astate.destination_task = nullptr;
       return {loc->state, new_astate, Direction::S}; 
     }
-    if (loc->loc == state.destination_task->task_location)
+    if (loc->loc == state.destination_task->state.task_location)
     {
       new_astate.committed_task = state.destination_task;
       new_astate.destination_task = nullptr;
@@ -90,7 +90,7 @@ AgentTransition Agent::generate_transition(LocalMapping &local_mapping)
     }
     else
     {
-      Direction new_direction = get_direction_from_destination(state.destination_task->task_location, loc->loc);
+      Direction new_direction = get_direction_from_destination(state.destination_task->state.task_location, loc->loc);
       return {loc->state, std::move(new_astate), std::move(new_direction)};
     }
   }

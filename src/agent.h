@@ -20,7 +20,7 @@ public:
   , state(AgentState(id_, loc_, 0.0))
   { }
 
-  LocationState * find_nearby_task(LocalMapping &local_mapping);
+  Location * find_nearby_task(LocalMapping &local_mapping);
   AgentTransition generate_transition(LocalMapping &local_mapping);
   Direction get_travel_direction(AgentState &new_agent_state);
   bool within_site(int x, int y);
