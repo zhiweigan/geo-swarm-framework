@@ -9,6 +9,7 @@ int
 main()
 {
   // constants
+  bool verbose = false;
   int n = HEIGHT, m = WIDTH;
   int num_agents = NUM_AGENTS;
   int num_tasks = NUM_TASKS;
@@ -57,7 +58,7 @@ main()
       total_rd += config.get_task(i)->state.residual_demand;
     }
     iter++;
-    if (iter % 100 == 0)
+    if (verbose && iter % 100 == 0)
     {
       std::cout<<"Iteration "<<iter<<std::endl;
     }
@@ -67,6 +68,8 @@ main()
   std::cout << "simulation took "
             << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count()
             << " milliseconds\n";
+
+  // TOOD: make this take command line arguments for constants
 
   return 0;
 }
