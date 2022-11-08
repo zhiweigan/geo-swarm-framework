@@ -56,4 +56,7 @@ private:
   parlay::sequence<int> offsets;
   parlay::sequence<int> counts;
   parlay::sequence<Location*> unique_vertices;
+
+  parlay::sequence<Agent *> *agent_ptrs;
+  parlay::sequence<Agent *> *agent_ptrs_tmp;
 };

@@ -18,7 +18,8 @@ void Configuration::init()
 
 void Configuration::add_agents(std::vector<Position> &agent_pos) 
 {
-  assert(agent_pos.size() < MAX_AGENTS);
+  agent_ptrs = new parlay::sequence<Agent *>();
+  agent_ptrs_tmp = new parlay::sequence<Agent *>();
   int16_t id = 0;
   for (Position pos : agent_pos)
   {
@@ -33,6 +34,8 @@ void Configuration::add_agents(std::vector<Position> &agent_pos)
     offsets.push_back(0);
     unique_vertices.push_back(0);
     counts.push_back(0);
+    agent_ptrs->push_back(&agent);
+    agent_ptrs_tmp->push_back(0);
   }
 }
 
@@ -132,6 +135,10 @@ Configuration::transition()
       Position pos = get_coords_from_movement(agents[i].loc->loc, transition.dir);
       agents[i].loc = map.get_vertex(pos.x, pos.y);
     }
+  });
+  agents = parlay::filter(agents, [&](Agent agent)
+  {
+    return agent.state.committed_task == nullptr;
   });
   auto update_end = std::chrono::high_resolution_clock::now();
   update += std::chrono::duration_cast<std::chrono::nanoseconds>(update_end - update_start).count();

@@ -56,8 +56,8 @@ main()
     config.transition();
     total_rd = 0;
     auto check_start = std::chrono::high_resolution_clock::now();
-    for(int i = 0; i < num_tasks; i++) {
-      total_rd += config.get_task(i)->state.residual_demand;
+    for(int i = 0; i < num_tasks; i++) { // make this parallel with reduce
+      total_rd += config.get_task(i)->state.residual_demand; // abstract out termination criteria
     }
     iter++;
     if (verbose && iter % 100 == 0)
