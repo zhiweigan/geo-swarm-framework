@@ -50,24 +50,33 @@ void
 Configuration::transition()
 {
   // sort agents by location TODO: semisort
+  auto sort_start = std::chrono::high_resolution_clock::now();
   auto comp = [&](Agent agent1, Agent agent2)
   {
     return agent1.loc->loc < agent2.loc->loc;
   };
   parlay::sort_inplace(agents, comp);
-  // parlay::integer_sort_inplace(agents, [&] (Agent agent){
+  // parlay::integer_sort_inplace(agents, [&](Agent agent)
+  // {
   //   uint x = agent.loc->loc.x;
   //   uint y = agent.loc->loc.y;
-  //   return ((x + y) * (x + y + 1) / 2) + y;
+  //   return ((x + y) * (x + y + 1) / 2) + y; 
   // });
+  auto sort_end = std::chrono::high_resolution_clock::now();
+  sorting += std::chrono::duration_cast<std::chrono::nanoseconds>(sort_end - sort_start).count();
+  
 
   // generate transitions for each agent
-  parlay::parallel_for(0, agents.size()-1, [&](int i)
+  auto transition_start = std::chrono::high_resolution_clock::now();
+  parlay::parallel_for(0, agents.size() - 1, [&](int i)
   { 
     agent_transitions[i] = agents[i].generate_transition(local_mappings[agents[i].loc->loc]); 
   });
+  auto transition_end = std::chrono::high_resolution_clock::now();
+  transitions += std::chrono::duration_cast<std::chrono::nanoseconds>(transition_end - transition_start).count();
 
   // get array differecnes
+  auto update_start = std::chrono::high_resolution_clock::now();
   parlay::parallel_for(0, agents.size()-1, [&](size_t i)
   {
     loc_diff[i] = 0;
@@ -87,7 +96,7 @@ Configuration::transition()
   // get offsets of differences in sorted array
   auto offset_filter = [&](int x)
   { return x != 0; };
-  size_t num_unique_locations = parlay::filter_into_uninitialized(loc_diff, offsets, offset_filter); // make this in-place
+  size_t num_unique_locations = parlay::filter_into_uninitialized(loc_diff, offsets, offset_filter);
 
   // save the unique vertices into an array for future use
   parlay::parallel_for(0, num_unique_locations, [&](size_t i)
@@ -124,6 +133,8 @@ Configuration::transition()
       agents[i].loc = map.get_vertex(pos.x, pos.y);
     }
   });
+  auto update_end = std::chrono::high_resolution_clock::now();
+  update += std::chrono::duration_cast<std::chrono::nanoseconds>(update_end - update_start).count();
 }
 
 void Configuration::set_task_vertex(Position & pos)

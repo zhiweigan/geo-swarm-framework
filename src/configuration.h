@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "res_utils.h"
 #include "parlay/sequence.h"
+#include <chrono>
 
 class Configuration {
 public:
@@ -32,6 +33,11 @@ public:
   int n;
   int m;
   BasicMap map;
+
+  // benchmarking
+  int sorting = 0;
+  int transitions = 0;
+  int update = 0;
 
 private:
   int influence_radius = 2;

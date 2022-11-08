@@ -49,11 +49,13 @@ main()
 
   int total_rd = total_demand;
   int iter = 0;
+  int time_checking = 0;
   std::cout<<"Starting simulation"<<std::endl;
   auto t1 = std::chrono::high_resolution_clock::now();
   while (total_rd > 0) {
     config.transition();
     total_rd = 0;
+    auto check_start = std::chrono::high_resolution_clock::now();
     for(int i = 0; i < num_tasks; i++) {
       total_rd += config.get_task(i)->state.residual_demand;
     }
@@ -62,9 +64,26 @@ main()
     {
       std::cout<<"Iteration "<<iter<<std::endl;
     }
-    // config.print_config(iter);
+    auto check_end = std::chrono::high_resolution_clock::now();
+    time_checking += std::chrono::duration_cast<std::chrono::nanoseconds>(check_end - check_start).count();
   }
   auto t2 = std::chrono::high_resolution_clock::now();
+  std::cout << "checking took "
+            << time_checking / 1e6
+            << " milliseconds \n";
+
+  std::cout << "sorting took "
+            << config.sorting / 1e6
+            << " milliseconds \n";
+
+  std::cout << "generating transitions took "
+            << config.transitions / 1e6
+            << " milliseconds \n";
+
+  std::cout << "updating took "
+            << config.update / 1e6
+            << " milliseconds \n";
+
   std::cout << "simulation took "
             << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count()
             << " milliseconds\n";

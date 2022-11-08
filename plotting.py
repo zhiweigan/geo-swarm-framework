@@ -12,8 +12,9 @@ parlay_rand_list = sorted(parlay_rand.items())
 parlay_rand_x, parlay_rand_y = zip(*parlay_rand_list)
 
 # parlay_sort_by_agent:
-by_agent = {1: 3083.2, 2: 2658.0, 4: 1941.6, 8: 1613.4, 16: 1545.0}
-by_agent_list = sorted(by_agent.items())
+by_agent_raw = {1: 3083.2, 2: 2658.0, 4: 1941.6, 8: 1613.4, 16: 1545.0}
+by_agent_list = [(key, by_agent_raw[1] / elem) for key, elem in by_agent_raw.items()]
+# by_agent_list = sorted(by_agent.items())
 by_agent_x, by_agent_y = zip(*by_agent_list)
 
 # plt.plot(none_x, none_y, color = 'r')
