@@ -2,7 +2,7 @@ import subprocess
 import os
 
 cores_to_try = [1,2,4,8,16]
-tries = 1
+tries = 5
 results = {}
 for cores in cores_to_try:
   total = 0

@@ -1,6 +1,6 @@
 #define HEIGHT 100
 #define WIDTH 100
 #define NUM_AGENTS 10000
-#define NUM_TASKS 200
-#define TOTAL_DEMAND 200
+#define NUM_TASKS 500
+#define TOTAL_DEMAND 500
 #define MAX_AGENTS 1000000
