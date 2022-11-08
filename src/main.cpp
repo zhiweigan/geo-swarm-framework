@@ -21,7 +21,7 @@ main()
   config.init();
   config.get_vertex(home_loc.x, home_loc.y)->state = LocationState(Position{home_loc.x, home_loc.y}, false, true);
 
-  std::vector<LocationState > tasks;
+  std::vector<LocationState> tasks;
   for (int i = 0; i < num_tasks; i++) {
     Position task_loc{(int16_t)(rand() % n), (int16_t)(rand() % m)};
     while (task_loc == home_loc) {

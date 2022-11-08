@@ -3,6 +3,7 @@
 #include "states.h"
 #include "constants.h"
 #include "res_utils.h"
+#include "parlay/sequence.h"
 
 class Configuration {
 public:
@@ -22,7 +23,6 @@ public:
   bool all_tasks_completed();
 
   void generate_global_transitory();
-  void delta(std::map<Position, Location *> &local_mapping);
 
   void print_config(int time = 0);
 
@@ -36,6 +36,18 @@ public:
 private:
   int influence_radius = 2;
   std::vector<Position> task_vertices;
-  std::vector<Agent> agents;
+  parlay::sequence<Agent> agents;
+  
+  parlay::sequence<AgentTransition> agent_transitions;
   std::map<Position, LocalMapping> local_mappings;
+
+
+  // parallel bookkeeping
+  parlay::sequence<int> loc_diff;
+  parlay::sequence<int> is_diff;
+  parlay::sequence<int> agent_offset;
+  parlay::sequence<int> individual_agent;
+  parlay::sequence<int> offsets;
+  parlay::sequence<int> counts;
+  parlay::sequence<Location*> unique_vertices;
 };
