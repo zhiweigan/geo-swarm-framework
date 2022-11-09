@@ -12,20 +12,20 @@ struct ProposedAgentTransition
 struct LocalTransitory
 {
   LocationState loc_state;
-  std::map<int16_t, ProposedAgentTransition> agent_updates;
+  std::map<int, ProposedAgentTransition> agent_updates;
 };
 
 inline LocalTransitory naive_resolution(
-  std::map<int16_t, LocationState> proposed_vertex_updates,
-  std::map<int16_t, ProposedAgentTransition> proposed_agent_updates,
+  std::map<int, LocationState> proposed_vertex_updates,
+  std::map<int, ProposedAgentTransition> proposed_agent_updates,
   Location *vertex)
 {
   return {proposed_vertex_updates.begin()->second, proposed_agent_updates};
 }
 
 inline LocalTransitory task_claiming_resolution(
-  std::map<int16_t, LocationState> proposed_vertex_updates, 
-  std::map<int16_t, ProposedAgentTransition> proposed_agent_updates, 
+  std::map<int, LocationState> proposed_vertex_updates, 
+  std::map<int, ProposedAgentTransition> proposed_agent_updates, 
   Location* vertex)
 {
   if (!vertex->state.is_task)
@@ -34,7 +34,7 @@ inline LocalTransitory task_claiming_resolution(
   }
 
   int attempted_claims = 0;
-  std::vector<uint16_t> winners;
+  std::vector<int> winners;
   int available_slots = vertex->state.residual_demand;
   for (auto const &[agent_id, loc_state] : proposed_vertex_updates)
   {
@@ -52,7 +52,7 @@ inline LocalTransitory task_claiming_resolution(
   }
   else
   {
-    std::map<int16_t, ProposedAgentTransition> new_proposed_agent_updates;
+    std::map<int, ProposedAgentTransition> new_proposed_agent_updates;
     shuffle(winners.begin(), winners.end(), std::default_random_engine(0));
 
     for (int i = 0; i < available_slots; i++)

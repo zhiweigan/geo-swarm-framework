@@ -61,8 +61,8 @@ struct LocationState
   { }
   bool is_task;
   bool is_home;
-  int16_t demand;
-  int16_t residual_demand;
+  int demand;
+  int residual_demand;
   Position task_location;
 };
 
@@ -76,13 +76,13 @@ public:
 
   Position loc;
   LocationState state;
-  std::set<int16_t> agents_seen;
+  std::set<int> agents_seen;
 };
 
 struct AgentState
 {
   AgentState() {}
-  AgentState(int16_t id_, Location &v_, double l_) 
+  AgentState(int id_, Location &v_, double l_) 
   : core_state("None")
   , id(id_)
   , levy_cap(l_)
@@ -92,7 +92,7 @@ struct AgentState
   { }
 
   std::string core_state;
-  int16_t id;
+  int id;
   double levy_cap;
   double angle;
   int travel_distance;

@@ -18,9 +18,7 @@ void Configuration::init()
 
 void Configuration::add_agents(std::vector<Position> &agent_pos) 
 {
-  // agent_ids = new parlay::sequence<int>();
-  // agent_ids_tmp = new parlay::sequence<int>();
-  int16_t id = 0;
+  int id = 0;
   for (Position pos : agent_pos)
   {
     map.get_vertex(pos.x, pos.y)->agents_seen.insert(id);
@@ -35,7 +33,6 @@ void Configuration::add_agents(std::vector<Position> &agent_pos)
     unique_vertices.push_back(0);
     counts.push_back(0);
     agent_ids.push_back(id-1);
-    // agent_ids_tmp->push_back(0);
   }
 }
 
@@ -43,7 +40,7 @@ void Configuration::reset_agents(std::vector<Position> &agent_pos)
 {
   for (int i = 0; i < n; i++) {
     for(int j = 0; j < m; j++) {
-      map.get_vertex(i, j)->agents_seen = std::set<int16_t>();
+      map.get_vertex(i, j)->agents_seen = std::set<int>();
     }
   }
   add_agents(agent_pos);
@@ -119,7 +116,7 @@ Configuration::transition()
   {
     if (unique_vertices[i]->state.is_task)
     {
-      unique_vertices[i]->state.residual_demand -= std::min((int16_t)counts[i], unique_vertices[i]->state.residual_demand);
+      unique_vertices[i]->state.residual_demand -= std::min(counts[i], unique_vertices[i]->state.residual_demand);
     } 
   });
 

@@ -17,7 +17,7 @@ struct AgentTransition
 class Agent 
 {
 public:
-  Agent(int16_t id_, Location &loc_) 
+  Agent(int id_, Location &loc_) 
   : loc(&loc_)
   , state(AgentState(id_, loc_, 0.0))
   , rgen(std::chrono::system_clock::now().time_since_epoch().count())
