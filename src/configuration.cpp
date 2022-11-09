@@ -80,10 +80,11 @@ Configuration::transition()
 
   // get array differecnes
   auto update_start = std::chrono::high_resolution_clock::now();
-  parlay::parallel_for(0, agent_ids.size()-1, [&](size_t i)
+  parlay::parallel_for(0, agents.size(), [&](size_t i)
   {
     loc_diff[i] = 0;
     is_diff[i] = 0;
+    offsets[i] = 0;
   });
 
   parlay::parallel_for(0, agent_ids.size() - 1, [&](size_t i)

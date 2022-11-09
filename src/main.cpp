@@ -88,6 +88,9 @@ main()
             << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count()
             << " milliseconds\n";
 
+  std::cout << "simulation completed in "
+            << iter
+            << " iterations\n";
   // TOOD: make this take command line arguments for constants
 
   return 0;
