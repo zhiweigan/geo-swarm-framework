@@ -125,7 +125,7 @@ Configuration::transition()
   // handle agents that need to move
   parlay::scan_inplace(counts);
   parlay::scan_inplace(is_diff);
-  parlay::parallel_for(0, agents.size(), [&](int i)
+  parlay::parallel_for(0, agent_ids.size(), [&](int i)
   {
     if (!agents[agent_ids[i]].loc->state.is_task ||
         (agents[agent_ids[i]].loc->state.is_task && i <= counts[is_diff[i]] + agents[agent_ids[i]].loc->state.residual_demand))
