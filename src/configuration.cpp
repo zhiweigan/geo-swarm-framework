@@ -18,8 +18,8 @@ void Configuration::init()
 
 void Configuration::add_agents(std::vector<Position> &agent_pos) 
 {
-  agent_ptrs = new parlay::sequence<Agent *>();
-  agent_ptrs_tmp = new parlay::sequence<Agent *>();
+  // agent_ids = new parlay::sequence<int>();
+  // agent_ids_tmp = new parlay::sequence<int>();
   int16_t id = 0;
   for (Position pos : agent_pos)
   {
@@ -34,8 +34,8 @@ void Configuration::add_agents(std::vector<Position> &agent_pos)
     offsets.push_back(0);
     unique_vertices.push_back(0);
     counts.push_back(0);
-    agent_ptrs->push_back(&agent);
-    agent_ptrs_tmp->push_back(0);
+    agent_ids.push_back(id-1);
+    // agent_ids_tmp->push_back(0);
   }
 }
 
@@ -54,11 +54,11 @@ Configuration::transition()
 {
   // sort agents by location TODO: semisort
   auto sort_start = std::chrono::high_resolution_clock::now();
-  auto comp = [&](Agent agent1, Agent agent2)
+  auto comp = [&](int agent1, int agent2)
   {
-    return agent1.loc->loc < agent2.loc->loc;
+    return agents[agent1].loc->loc < agents[agent2].loc->loc;
   };
-  parlay::sort_inplace(agents, comp);
+  parlay::sort_inplace(agent_ids, comp);
   // parlay::integer_sort_inplace(agents, [&](Agent agent)
   // {
   //   uint x = agent.loc->loc.x;
@@ -71,30 +71,30 @@ Configuration::transition()
 
   // generate transitions for each agent
   auto transition_start = std::chrono::high_resolution_clock::now();
-  parlay::parallel_for(0, agents.size() - 1, [&](int i)
+  parlay::parallel_for(0, agent_ids.size() - 1, [&](int i)
   { 
-    agent_transitions[i] = agents[i].generate_transition(local_mappings[agents[i].loc->loc]); 
+    agent_transitions[i] = agents[agent_ids[i]].generate_transition(local_mappings[agents[agent_ids[i]].loc->loc]); 
   });
   auto transition_end = std::chrono::high_resolution_clock::now();
   transitions += std::chrono::duration_cast<std::chrono::nanoseconds>(transition_end - transition_start).count();
 
   // get array differecnes
   auto update_start = std::chrono::high_resolution_clock::now();
-  parlay::parallel_for(0, agents.size()-1, [&](size_t i)
+  parlay::parallel_for(0, agent_ids.size()-1, [&](size_t i)
   {
     loc_diff[i] = 0;
     is_diff[i] = 0;
   });
 
-  parlay::parallel_for(0, agents.size()-1, [&](size_t i)
+  parlay::parallel_for(0, agent_ids.size() - 1, [&](size_t i)
   {
-    if (agents[i].loc->loc != agents[i+1].loc->loc){
+    if (agents[agent_ids[i]].loc->loc != agents[agent_ids[i+1]].loc->loc){
       loc_diff[i] = i+1;
       is_diff[i] = 1;
     } 
   });
-  loc_diff[agents.size() - 1] = agents.size();
-  is_diff[agents.size() - 1] = 1;
+  loc_diff[agent_ids.size() - 1] = agent_ids.size();
+  is_diff[agent_ids.size() - 1] = 1;
 
   // get offsets of differences in sorted array
   auto offset_filter = [&](int x)
@@ -104,7 +104,7 @@ Configuration::transition()
   // save the unique vertices into an array for future use
   parlay::parallel_for(0, num_unique_locations, [&](size_t i)
   { 
-    unique_vertices[i] = agents[offsets[i] - 1].loc; 
+    unique_vertices[i] = agents[agent_ids[offsets[i] - 1]].loc; 
   });
 
   counts[0] = offsets[0];
@@ -127,18 +127,18 @@ Configuration::transition()
   parlay::scan_inplace(is_diff);
   parlay::parallel_for(0, agents.size(), [&](int i)
   {
-    if (!agents[i].loc->state.is_task ||
-        (agents[i].loc->state.is_task && i <= counts[is_diff[i]] + agents[i].loc->state.residual_demand))
+    if (!agents[agent_ids[i]].loc->state.is_task ||
+        (agents[agent_ids[i]].loc->state.is_task && i <= counts[is_diff[i]] + agents[agent_ids[i]].loc->state.residual_demand))
     {
       auto &transition = agent_transitions[i];
-      agents[i].state = transition.astate;
-      Position pos = get_coords_from_movement(agents[i].loc->loc, transition.dir);
-      agents[i].loc = map.get_vertex(pos.x, pos.y);
-    }
+      agents[agent_ids[i]].state = transition.astate;
+      Position pos = get_coords_from_movement(agents[agent_ids[i]].loc->loc, transition.dir);
+      agents[agent_ids[i]].loc = map.get_vertex(pos.x, pos.y);
+    } 
   });
-  agents = parlay::filter(agents, [&](Agent agent)
+  agent_ids = parlay::filter(agent_ids, [&](int agent)
   {
-    return agent.state.committed_task == nullptr;
+    return agents[agent].state.committed_task == nullptr;
   });
   auto update_end = std::chrono::high_resolution_clock::now();
   update += std::chrono::duration_cast<std::chrono::nanoseconds>(update_end - update_start).count();

@@ -35,9 +35,9 @@ public:
   BasicMap map;
 
   // benchmarking
-  int sorting = 0;
-  int transitions = 0;
-  int update = 0;
+  uint64_t sorting = 0;
+  uint64_t transitions = 0;
+  uint64_t update = 0;
 
 private:
   int influence_radius = 2;
@@ -57,6 +57,6 @@ private:
   parlay::sequence<int> counts;
   parlay::sequence<Location*> unique_vertices;
 
-  parlay::sequence<Agent *> *agent_ptrs;
-  parlay::sequence<Agent *> *agent_ptrs_tmp;
+  parlay::sequence<int> agent_ids;
+  // parlay::sequence<int> *agent_ids_tmp;
 };
