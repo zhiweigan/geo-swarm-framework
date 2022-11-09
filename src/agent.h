@@ -5,6 +5,7 @@
 #include "parlay/random.h"
 #include <map>
 #include <cstdint>
+#include <chrono>
 
 struct AgentTransition 
 {
@@ -19,7 +20,7 @@ public:
   Agent(int16_t id_, Location &loc_) 
   : loc(&loc_)
   , state(AgentState(id_, loc_, 0.0))
-  , rgen(id_)
+  , rgen(std::chrono::system_clock::now().time_since_epoch().count())
   { }
 
   Location * find_nearby_task(LocalMapping &local_mapping);

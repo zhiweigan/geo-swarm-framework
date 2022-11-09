@@ -148,6 +148,12 @@ Configuration::transition()
 void Configuration::set_task_vertex(Position & pos)
 {
   task_vertices.emplace_back(pos.x, pos.y);
+  task_locations.push_back(map.get_vertex(pos.x, pos.y));
+}
+
+parlay::sequence<Location *> *Configuration::get_tasks()
+{
+  return &task_locations;
 }
 
 bool Configuration::all_agents_terminated()
