@@ -10,6 +10,7 @@
 int
 main()
 {
+  // TODO: optimize setup
   // constants
   bool verbose = VERBOSE;
   int n = HEIGHT, m = WIDTH;
@@ -25,10 +26,13 @@ main()
   std::vector<LocationState> tasks;
   for (int i = 0; i < num_tasks; i++) {
     Position task_loc{(int16_t)(rand() % n), (int16_t)(rand() % m)};
-    while (task_loc == home_loc) {
+    while (task_loc == home_loc || config.map.get_vertex(task_loc.x, task_loc.y)->state.is_task)
+    {
       task_loc = Position{(int16_t)(rand() % n), (int16_t)(rand() % m)};
     }
     tasks.emplace_back(task_loc, true, false, 1, 1);
+    config.set_task_vertex(task_loc);
+    config.map.get_vertex(task_loc.x, task_loc.y)->state.is_task = true;
   }
 
   for (int i = 0; i < total_demand - num_tasks; i++) {
@@ -39,7 +43,6 @@ main()
  
   for (auto task : tasks) {
     config.map.get_vertex(task.task_location.x, task.task_location.y)->state = task;
-    config.set_task_vertex(task.task_location);
   }
 
   std::vector<Position> agent_pos;
