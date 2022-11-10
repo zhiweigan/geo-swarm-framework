@@ -29,7 +29,7 @@ public:
 
   Location* get_vertex(int x, int y);
   Location* get_task(int i);
-  parlay::sequence<Location *>* get_tasks();
+  parlay::sequence<Position>* get_tasks();
 
   int n;
   int m;
@@ -42,8 +42,7 @@ public:
 
 private:
   int influence_radius = 2;
-  std::vector<Position> task_vertices;
-  parlay::sequence<Location*> task_locations;
+  parlay::sequence<Position> task_vertices;
   parlay::sequence<Agent> agents;
   
   parlay::sequence<AgentTransition> agent_transitions;

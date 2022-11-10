@@ -11,7 +11,7 @@ int
 main()
 {
   // constants
-  bool verbose = false;
+  bool verbose = VERBOSE;
   int n = HEIGHT, m = WIDTH;
   int num_agents = NUM_AGENTS;
   int num_tasks = NUM_TASKS;
@@ -28,7 +28,6 @@ main()
     while (task_loc == home_loc) {
       task_loc = Position{(int16_t)(rand() % n), (int16_t)(rand() % m)};
     }
-    config.set_task_vertex(task_loc);
     tasks.emplace_back(task_loc, true, false, 1, 1);
   }
 
@@ -39,7 +38,8 @@ main()
   }
  
   for (auto task : tasks) {
-    config.map.get_vertex(task.task_location.x, task.task_location.y)->state = std::move(task);
+    config.map.get_vertex(task.task_location.x, task.task_location.y)->state = task;
+    config.set_task_vertex(task.task_location);
   }
 
   std::vector<Position> agent_pos;
@@ -53,19 +53,22 @@ main()
   int time_checking = 0;
   std::cout<<"Starting simulation"<<std::endl;
   auto t1 = std::chrono::high_resolution_clock::now();
-  auto get_demand = [&] (Location* task_vertex) { return task_vertex->state.residual_demand; };
+  auto get_demand = [&] (Position task_vertex) { return config.get_vertex(task_vertex.x, task_vertex.y)->state.residual_demand; };
 
   while (total_rd > 0) {
     config.transition();
     auto check_start = std::chrono::high_resolution_clock::now();
     total_rd = parlay::reduce(parlay::delayed_map(*config.get_tasks(), get_demand));
     iter++;
-    if (verbose && iter % 100 == 0)
-    {
-      std::cout<<"Iteration "<<iter<<std::endl;
-    }
     auto check_end = std::chrono::high_resolution_clock::now();
     time_checking += std::chrono::duration_cast<std::chrono::nanoseconds>(check_end - check_start).count();
+
+    if (ITERS > 0 && iter >= ITERS)
+      break;
+    if (verbose && iter % 100 == 0) {
+      std::cout << "Iteration: " << iter << ", Residual Demand: "<<total_rd<<std::endl;
+      // config.print_config();
+    }
   }
 
   auto t2 = std::chrono::high_resolution_clock::now();

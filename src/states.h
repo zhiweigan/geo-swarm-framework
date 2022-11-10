@@ -50,8 +50,8 @@ struct LocationState
     Position task_location_,
     bool is_task_ = false,
     bool is_home_ = false,
-    int16_t demand_ = 0,
-    int16_t residual_demand_ = 0
+    int demand_ = 0,
+    int residual_demand_ = 0
   )
     : is_task(is_task_)
     , is_home(is_home_)
