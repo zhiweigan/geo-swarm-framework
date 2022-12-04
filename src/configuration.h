@@ -6,6 +6,7 @@
 #include "parlay/sequence.h"
 #include <chrono>
 
+
 class Configuration {
 public:
   Configuration(int n_, int m_)

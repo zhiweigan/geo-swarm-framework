@@ -12,7 +12,7 @@ main()
 {
   // TODO: optimize setup
   // constants
-  bool verbose = VERBOSE;
+  bool verbose = false;
   int n = HEIGHT, m = WIDTH;
   int num_agents = NUM_AGENTS;
   int num_tasks = NUM_TASKS;
@@ -21,9 +21,13 @@ main()
 
   Configuration config(n, m);
   config.init();
-  config.get_vertex(home_loc.x, home_loc.y)->state = LocationState(Position{home_loc.x, home_loc.y}, false, true);
+  config.get_vertex(home_loc.x, home_loc.y)->state = TaskAllocLocationState(Position{home_loc.x, home_loc.y}, false, true);
 
-  std::vector<LocationState> tasks;
+  // somehow load a user defined configuration here
+
+
+  // this is part of setup
+  std::vector<TaskAllocLocationState> tasks;
   for (int i = 0; i < num_tasks; i++) {
     Position task_loc{(int16_t)(rand() % n), (int16_t)(rand() % m)};
     while (task_loc == home_loc || config.map.get_vertex(task_loc.x, task_loc.y)->state.is_task)

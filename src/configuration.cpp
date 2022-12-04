@@ -16,6 +16,7 @@ void Configuration::init()
   }
 }
 
+// add new function to set up parallelism, based on HEIGHT, WIDTH, NUMAGENTS
 void Configuration::add_agents(std::vector<Position> &agent_pos) 
 {
   int id = 0;
@@ -24,7 +25,7 @@ void Configuration::add_agents(std::vector<Position> &agent_pos)
     map.get_vertex(pos.x, pos.y)->agents_seen.insert(id);
     Agent agent(id++, *map.get_vertex(pos.x, pos.y));
     agents.push_back(agent);
-    agent_transitions.push_back(AgentTransition{LocationState{pos}, AgentState{}, Direction::S});
+    agent_transitions.push_back(AgentTransition({pos}, {}));
 
     // parallel stuff
     loc_diff.push_back(false);
@@ -35,7 +36,9 @@ void Configuration::add_agents(std::vector<Position> &agent_pos)
     agent_ids.push_back(id-1);
   }
 }
+ 
 
+// helper
 void Configuration::reset_agents(std::vector<Position> &agent_pos)
 {
   for (int i = 0; i < n; i++) {
@@ -56,12 +59,6 @@ Configuration::transition()
     return agents[agent1].loc->loc < agents[agent2].loc->loc;
   };
   parlay::sort_inplace(agent_ids, comp);
-  // parlay::integer_sort_inplace(agents, [&](Agent agent)
-  // {
-  //   uint x = agent.loc->loc.x;
-  //   uint y = agent.loc->loc.y;
-  //   return ((x + y) * (x + y + 1) / 2) + y; 
-  // });
   auto sort_end = std::chrono::high_resolution_clock::now();
   sorting += std::chrono::duration_cast<std::chrono::nanoseconds>(sort_end - sort_start).count();
   
@@ -111,7 +108,7 @@ Configuration::transition()
     counts[i] = offsets[i] - offsets[i - 1]; 
   });
 
-  // update location states
+  // update location states based on accepted agent transitions?
   parlay::parallel_for(0, num_unique_locations, [&](int i)
   {
     if (unique_vertices[i]->state.is_task)
@@ -120,7 +117,7 @@ Configuration::transition()
     } 
   });
 
-  // handle agents that need to move
+  // handle agents that need to move 
   parlay::scan_inplace(counts);
   parlay::scan_inplace(is_diff);
   parlay::parallel_for(0, agent_ids.size(), [&](int i)
@@ -157,6 +154,7 @@ bool Configuration::all_agents_terminated()
   return false;
 }
 
+// helper
 bool Configuration::all_tasks_completed()
 {
   return false;
@@ -167,11 +165,13 @@ Location *Configuration::get_vertex(int x, int y)
   return map.get_vertex(x, y);
 }
 
+// helper
 Location *Configuration::get_task(int i)
 {
   return map.get_vertex(task_vertices[i].x, task_vertices[i].y);
 }
 
+// helper
 void Configuration::print_config(int time)
 {
   std::cout << "map @ time" << time << std::endl;

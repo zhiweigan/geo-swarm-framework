@@ -8,9 +8,12 @@
 #include "states.h"
 #include "constants.h"
 
-inline std::map<Position, Location *> generate_local_mapping(Location &vtx, int influence_radius, BasicMap &map)
+inline std::map<Position, Location *> generate_local_mapping(
+  Location &vtx, 
+  int influence_radius, 
+  BasicMap &map)
 {
-  std::map<Position, Location *> ret_map;
+  std::map<Position, Location*> ret_map;
   int vx = vtx.loc.x;
   int vy = vtx.loc.y;
 

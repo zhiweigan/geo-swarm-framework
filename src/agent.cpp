@@ -5,7 +5,9 @@
 #include <map>
 #include <climits>
 
-Location * Agent::find_nearby_task(LocalMapping &local_mapping)
+// helper
+template <class AgentState>
+Location *AgentTemplate<AgentState>::find_nearby_task(LocalMapping &local_mapping)
 {
   Location *return_state = nullptr;
   Position origin = local_mapping[Position{0, 0}]->loc;
@@ -26,7 +28,8 @@ Location * Agent::find_nearby_task(LocalMapping &local_mapping)
   return return_state;
 }
 
-bool Agent::within_site(int x, int y)
+template <class AgentState>
+bool AgentTemplate<AgentState>::within_site(int x, int y)
 {
   return x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH;
 }
@@ -36,7 +39,9 @@ bool Agent::within_site(int x, int y)
 //   return (1.0 / sqrt(2.0 * M_PI * pow(x, 2.0)) * exp(-1.0 / (2.0 * x)));
 // }
 
-Direction Agent::get_travel_direction(AgentState &new_agent_state)
+// helper
+template <class AgentState>
+Direction AgentTemplate<AgentState>::get_travel_direction(AgentState &new_agent_state)
 {
   if (state.travel_distance <= 0)
   {
@@ -59,7 +64,9 @@ Direction Agent::get_travel_direction(AgentState &new_agent_state)
   return new_direction;
 }
 
-AgentTransition Agent::generate_transition(LocalMapping &local_mapping)
+// helper
+template <class AgentState>
+AgentTransition AgentTemplate<AgentState>::generate_transition(LocalMapping &local_mapping)
 {
   AgentState new_astate = state;
   if (!state.committed_task && !state.destination_task)

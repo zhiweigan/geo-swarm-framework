@@ -1,11 +1,12 @@
 #include "map.h"
 
-Location* BasicMap::get_vertex(int x, int y)
+Location *BasicMap::get_vertex(int x, int y)
 {
   return &vertices[x * m + y];
 }
 
-void BasicMap::set_transition(int x, int y, LocalTransitory &&transition){
+void BasicMap::set_transition(int x, int y, LocalTransitory &&transition)
+{
   transitions[x * m + y] = std::move(transition);
 }
 

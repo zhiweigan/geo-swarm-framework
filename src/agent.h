@@ -7,23 +7,17 @@
 #include <cstdint>
 #include <chrono>
 
-struct AgentTransition 
-{
-  LocationState lstate;
-  AgentState astate;
-  Direction dir;
-};
-
-class Agent 
+template <class AgentState>
+class AgentTemplate
 {
 public:
-  Agent(int id_, Location &loc_) 
+  AgentTemplate(int id_, Location &loc_) 
   : loc(&loc_)
   , state(AgentState(id_, loc_, 0.0))
   , rgen(std::chrono::system_clock::now().time_since_epoch().count())
   { }
 
-  Location * find_nearby_task(LocalMapping &local_mapping);
+  Location *find_nearby_task(LocalMapping &local_mapping);
   AgentTransition generate_transition(LocalMapping &local_mapping);
   Direction get_travel_direction(AgentState &new_agent_state);
   bool within_site(int x, int y);
@@ -32,3 +26,4 @@ public:
   parlay::random_generator rgen;
 };
 
+using Agent = AgentTemplate<TaskAllocAgentState>;

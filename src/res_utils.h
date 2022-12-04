@@ -3,30 +3,20 @@
 #include <algorithm>
 #include <random>
 
-struct ProposedAgentTransition
-{
-  AgentState astate;
-  Direction dir;
-};
-
-struct LocalTransitory
-{
-  LocationState loc_state;
-  std::map<int, ProposedAgentTransition> agent_updates;
-};
-
+template <class LocationState>
 inline LocalTransitory naive_resolution(
-  std::map<int, LocationState> proposed_vertex_updates,
-  std::map<int, ProposedAgentTransition> proposed_agent_updates,
-  Location *vertex)
+    std::map<int, LocationState> proposed_vertex_updates,
+    std::map<int, ProposedAgentTransition> proposed_agent_updates,
+    Location *vertex)
 {
   return {proposed_vertex_updates.begin()->second, proposed_agent_updates};
 }
 
+template <class LocationState>
 inline LocalTransitory task_claiming_resolution(
-  std::map<int, LocationState> proposed_vertex_updates, 
-  std::map<int, ProposedAgentTransition> proposed_agent_updates, 
-  Location* vertex)
+    std::map<int, LocationState> proposed_vertex_updates,
+    std::map<int, ProposedAgentTransition> proposed_agent_updates,
+    Location *vertex)
 {
   if (!vertex->state.is_task)
   {

@@ -44,9 +44,9 @@ struct Position {
   }
 };
 
-struct LocationState
+struct TaskAllocLocationState
 {
-  LocationState(
+  TaskAllocLocationState(
     Position task_location_,
     bool is_task_ = false,
     bool is_home_ = false,
@@ -66,10 +66,11 @@ struct LocationState
   Position task_location;
 };
 
-class Location
+template<class LocationState, class AgentState>
+class LocationTemplate
 {
 public:
-  Location(int16_t x_, int16_t y_)
+  LocationTemplate(int16_t x_, int16_t y_)
     : loc(Position(x_, y_))
     , state(LocationState(Position{x_, y_}))
   { }
@@ -79,10 +80,10 @@ public:
   std::set<int> agents_seen;
 };
 
-struct AgentState
+struct TaskAllocAgentState
 {
-  AgentState() {}
-  AgentState(int id_, Location &v_, double l_) 
+  TaskAllocAgentState() {}
+  TaskAllocAgentState(int id_, Location &v_, double l_) 
   : core_state("None")
   , id(id_)
   , levy_cap(l_)
@@ -101,4 +102,39 @@ struct AgentState
   Location *destination_task = nullptr;
 };
 
+template <class AgentState>
+struct ProposedAgentTransitionTemplate
+{
+  AgentState astate;
+  Direction dir;
+};
+
+template <class LocationState, class AgentState>
+struct LocalTransitoryTemplate
+{
+  LocationState loc_state;
+  std::map<int, ProposedAgentTransitionTemplate<AgentState>> agent_updates;
+};
+
+template <class LocationState, class AgentState>
+struct AgentTransitionTemplate
+{
+  AgentTransitionTemplate (
+    LocationState lstate_,
+    AgentState astate_
+  )
+  : lstate (lstate_)
+  , astate (astate_)
+  , dir (Direction::S)
+  { }
+
+  LocationState lstate;
+  AgentState astate;
+  Direction dir;
+};
+
+using Location = LocationTemplate<TaskAllocLocationState, TaskAllocAgentState>;
+using ProposedAgentTransition = ProposedAgentTransitionTemplate <TaskAllocAgentState>;
+using LocalTransitory = LocalTransitoryTemplate<TaskAllocLocationState, TaskAllocAgentState>;
+using AgentTransition = AgentTransitionTemplate<TaskAllocLocationState, TaskAllocAgentState>;
 typedef std::map<Position, Location *> LocalMapping;
