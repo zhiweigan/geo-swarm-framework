@@ -1,10 +1,9 @@
 #pragma once
-#include "states.h"
-#include "map.h"
-#include "constants.h"
-#include "parlay/random.h"
-#include "agent.h"
-#include "geo_utils.h"
+#include "alloc_states.h"
+#include "../../src/map.h"
+#include "../../src/constants.h"
+#include "../../src/parlay/random.h"
+#include "../../src/geo_utils.h"
 #include <map>
 #include <cstdint>
 #include <chrono>
@@ -14,7 +13,7 @@ template <class LocationState, class AgentState>
 class AgentTemplate
 {
 public:
-  AgentTemplate(int id_, Location &loc_)
+  AgentTemplate(int id_, Location &loc_) 
   : loc(&loc_)
   , state(AgentState(id_, loc_, 0.0))
   , rgen(std::chrono::system_clock::now().time_since_epoch().count())

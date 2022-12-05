@@ -2,7 +2,7 @@
 TARGET_EXEC := final_program
 
 BUILD_DIR := ./build
-SRC_DIRS := ./src
+SRC_DIRS := ./src ./apps/taskallocation
 
 CC = g++
 
@@ -32,11 +32,6 @@ LDFLAGS := -lpthread
 # The final build step.
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
-
-# Build step for C source
-$(BUILD_DIR)/%.c.o: %.c
-	mkdir -p $(dir $@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 # Build step for C++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp
