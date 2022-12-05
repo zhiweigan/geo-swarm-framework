@@ -16,6 +16,20 @@ void Configuration::init()
   }
 }
 
+void Configuration::parallel_setup()
+{
+  for (Agent agent : agents) 
+  {
+    loc_diff.push_back(false);
+    is_diff.push_back(0);
+    offsets.push_back(0);
+    unique_vertices.push_back(0);
+    counts.push_back(0);
+    agent_ids.push_back(agent.state.id);
+    removed_agent_ids.push_back(-1);
+  }
+}
+
 // add new function to set up parallelism, based on HEIGHT, WIDTH, NUMAGENTS
 void Configuration::add_agents(std::vector<Position> &agent_pos) 
 {
@@ -26,27 +40,7 @@ void Configuration::add_agents(std::vector<Position> &agent_pos)
     Agent agent(id++, *map.get_vertex(pos.x, pos.y));
     agents.push_back(agent);
     agent_transitions.push_back(AgentTransition({pos}, {}));
-
-    // parallel stuff
-    loc_diff.push_back(false);
-    is_diff.push_back(0);
-    offsets.push_back(0);
-    unique_vertices.push_back(0);
-    counts.push_back(0);
-    agent_ids.push_back(id-1);
   }
-}
- 
-
-// helper
-void Configuration::reset_agents(std::vector<Position> &agent_pos)
-{
-  for (int i = 0; i < n; i++) {
-    for(int j = 0; j < m; j++) {
-      map.get_vertex(i, j)->agents_seen = std::set<int>();
-    }
-  }
-  add_agents(agent_pos);
 }
 
 void
@@ -62,7 +56,6 @@ Configuration::transition()
   auto sort_end = std::chrono::high_resolution_clock::now();
   sorting += std::chrono::duration_cast<std::chrono::nanoseconds>(sort_end - sort_start).count();
   
-
   // generate transitions for each agent
   auto transition_start = std::chrono::high_resolution_clock::now();
   parlay::parallel_for(0, agent_ids.size() - 1, [&](int i)
@@ -74,11 +67,18 @@ Configuration::transition()
 
   // get array differecnes
   auto update_start = std::chrono::high_resolution_clock::now();
+  update_config();
+  auto update_end = std::chrono::high_resolution_clock::now();
+  update += std::chrono::duration_cast<std::chrono::nanoseconds>(update_end - update_start).count();
+}
+
+void Configuration::update_config()
+{
   parlay::parallel_for(0, agents.size(), [&](size_t i)
   {
     loc_diff[i] = 0;
     is_diff[i] = 0;
-    offsets[i] = 0;
+    offsets[i] = 0; 
   });
 
   parlay::parallel_for(0, agent_ids.size() - 1, [&](size_t i)
@@ -117,7 +117,7 @@ Configuration::transition()
     } 
   });
 
-  // handle agents that need to move 
+  // handle agents that need to move
   parlay::scan_inplace(counts);
   parlay::scan_inplace(is_diff);
   parlay::parallel_for(0, agent_ids.size(), [&](int i)
@@ -132,11 +132,9 @@ Configuration::transition()
     } 
   });
   agent_ids = parlay::filter(agent_ids, [&](int agent)
-  {
-    return agents[agent].state.committed_task == nullptr;
+  { 
+    return agents[agent].state.committed_task == nullptr; 
   });
-  auto update_end = std::chrono::high_resolution_clock::now();
-  update += std::chrono::duration_cast<std::chrono::nanoseconds>(update_end - update_start).count();
 }
 
 void Configuration::set_task_vertex(Position & pos)
@@ -149,15 +147,15 @@ parlay::sequence<Position> *Configuration::get_tasks()
   return &task_vertices;
 }
 
-bool Configuration::all_agents_terminated()
-{
-  return false;
-}
 
 // helper
-bool Configuration::all_tasks_completed()
+bool Configuration::is_finished()
 {
-  return false;
+  int total_rd = parlay::reduce(parlay::delayed_map(*get_tasks(), [&](Position task_vertex)
+  { 
+      return get_vertex(task_vertex.x, task_vertex.y)->state.residual_demand; 
+  }));
+  return total_rd == 0;
 }
 
 Location *Configuration::get_vertex(int x, int y)

@@ -23,9 +23,6 @@ main()
   config.init();
   config.get_vertex(home_loc.x, home_loc.y)->state = TaskAllocLocationState(Position{home_loc.x, home_loc.y}, false, true);
 
-  // somehow load a user defined configuration here
-
-
   // this is part of setup
   std::vector<TaskAllocLocationState> tasks;
   for (int i = 0; i < num_tasks; i++) {
@@ -54,35 +51,25 @@ main()
     agent_pos.emplace_back(home_loc.x, home_loc.y);
   }
   config.add_agents(agent_pos);
+  config.parallel_setup();
 
-  int total_rd = total_demand;
   int iter = 0;
-  int time_checking = 0;
   std::cout<<"Starting simulation"<<std::endl;
   auto t1 = std::chrono::high_resolution_clock::now();
-  auto get_demand = [&] (Position task_vertex) { return config.get_vertex(task_vertex.x, task_vertex.y)->state.residual_demand; };
 
-  while (total_rd > 0) {
+  while (!config.is_finished()) {
     config.transition();
-    auto check_start = std::chrono::high_resolution_clock::now();
-    total_rd = parlay::reduce(parlay::delayed_map(*config.get_tasks(), get_demand));
     iter++;
-    auto check_end = std::chrono::high_resolution_clock::now();
-    time_checking += std::chrono::duration_cast<std::chrono::nanoseconds>(check_end - check_start).count();
 
     if (ITERS > 0 && iter >= ITERS)
       break;
     if (verbose && iter % 100 == 0) {
-      std::cout << "Iteration: " << iter << ", Residual Demand: "<<total_rd<<std::endl;
+      std::cout << "Iteration: " << iter <<std::endl;
       // config.print_config();
     }
   }
 
   auto t2 = std::chrono::high_resolution_clock::now();
-  std::cout << "checking took "
-            << time_checking / 1e6
-            << " milliseconds\n";
-
   std::cout << "sorting took "
             << config.sorting / 1e6
             << " milliseconds\n";

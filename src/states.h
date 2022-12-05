@@ -83,7 +83,7 @@ public:
 struct TaskAllocAgentState
 {
   TaskAllocAgentState() {}
-  TaskAllocAgentState(int id_, Location &v_, double l_) 
+  TaskAllocAgentState(int id_, LocationTemplate<TaskAllocLocationState, TaskAllocAgentState> &v_, double l_) 
   : core_state("None")
   , id(id_)
   , levy_cap(l_)
@@ -98,8 +98,8 @@ struct TaskAllocAgentState
   double angle;
   int travel_distance;
   Position starting_point;
-  Location *committed_task = nullptr;
-  Location *destination_task = nullptr;
+  LocationTemplate<TaskAllocLocationState, TaskAllocAgentState> *committed_task = nullptr;
+  LocationTemplate<TaskAllocLocationState, TaskAllocAgentState> *destination_task = nullptr;
 };
 
 template <class AgentState>
@@ -126,6 +126,16 @@ struct AgentTransitionTemplate
   : lstate (lstate_)
   , astate (astate_)
   , dir (Direction::S)
+  { }
+
+  AgentTransitionTemplate(
+    LocationState lstate_,
+    AgentState astate_,
+    Direction dir_
+  )
+  : lstate(lstate_)
+  , astate(astate_)
+  , dir(dir_)
   { }
 
   LocationState lstate;

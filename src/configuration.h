@@ -17,20 +17,17 @@ public:
 
   void init();
   void add_agents(std::vector<Position> &agent_pos);
-  void reset_agents(std::vector<Position> &agent_pos);
-  void set_task_vertex(Position &pos);
-  void execute_transition();
   void transition();
-  bool all_agents_terminated();
-  bool all_tasks_completed();
+  Location *get_vertex(int x, int y);
+  
 
-  void generate_global_transitory();
-
+  void parallel_setup();
+  void set_task_vertex(Position &pos);
+  void update_config();
+  bool is_finished();
   void print_config(int time = 0);
-
-  Location* get_vertex(int x, int y);
-  Location* get_task(int i);
-  parlay::sequence<Position>* get_tasks();
+  Location *get_task(int i);
+  parlay::sequence<Position> *get_tasks();
 
   int n;
   int m;
@@ -43,12 +40,12 @@ public:
 
 private:
   int influence_radius = 2;
-  parlay::sequence<Position> task_vertices;
+  
   parlay::sequence<Agent> agents;
   
   parlay::sequence<AgentTransition> agent_transitions;
   std::map<Position, LocalMapping> local_mappings;
-
+  parlay::sequence<Position> task_vertices;
 
   // parallel bookkeeping
   parlay::sequence<int> loc_diff;
@@ -60,5 +57,5 @@ private:
   parlay::sequence<Location*> unique_vertices;
 
   parlay::sequence<int> agent_ids;
-  // parlay::sequence<int> *agent_ids_tmp;
+  parlay::sequence<int> removed_agent_ids;
 };
