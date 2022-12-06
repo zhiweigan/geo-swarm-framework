@@ -25,7 +25,7 @@ void Configuration::add_agents(std::vector<Position> &agent_pos)
     map.get_vertex(pos.x, pos.y)->agents_seen.insert(id);
     Agent agent(id++, *map.get_vertex(pos.x, pos.y));
     agents.push_back(agent);
-    agent_transitions.push_back(AgentTransition({pos}, {}));
+    agent_transitions.push_back(AgentTransition({pos}, {id-1}));
   }
 }
 

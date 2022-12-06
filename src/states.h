@@ -99,4 +99,4 @@ struct AgentTransitionTemplate
   Direction dir;
 };
 
-#include "../apps/taskallocation/alloc_states.h"
+#include "../apps/density/density_states.h"

@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 #include "states.h"
-#include "res_utils.h"
 
 class BasicMap
 {

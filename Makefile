@@ -2,7 +2,7 @@
 TARGET_EXEC := final_program
 
 BUILD_DIR := ./build
-SRC_DIRS := ./src ./apps/taskallocation
+SRC_DIRS := ./src ./apps/density
 
 CC = g++
 

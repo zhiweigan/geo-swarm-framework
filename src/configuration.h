@@ -2,7 +2,6 @@
 #include "map.h"
 #include "states.h"
 #include "constants.h"
-#include "res_utils.h"
 #include "parlay/sequence.h"
 #include <chrono>
 
