@@ -43,6 +43,7 @@ private:
   parlay::sequence<Agent> agents;
   
   parlay::sequence<AgentTransition> agent_transitions;
+  parlay::sequence<AgentMessage> agent_messages;
   std::map<Position, LocalMapping> local_mappings;
   parlay::sequence<Position> task_vertices;
 

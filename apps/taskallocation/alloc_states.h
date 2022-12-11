@@ -50,8 +50,14 @@ struct TaskAllocAgentState
   LocationTemplate<TaskAllocLocationState, TaskAllocAgentState> *destination_task = nullptr;
 };
 
-using Location = LocationTemplate<TaskAllocLocationState, TaskAllocAgentState>;
+struct AllocAgentMessage
+{
+
+};
+
+using Location                = LocationTemplate<TaskAllocLocationState, TaskAllocAgentState>;
 using ProposedAgentTransition = ProposedAgentTransitionTemplate <TaskAllocAgentState>;
-using LocalTransitory = LocalTransitoryTemplate<TaskAllocLocationState, TaskAllocAgentState>;
-using AgentTransition = AgentTransitionTemplate<TaskAllocLocationState, TaskAllocAgentState>;
-typedef std::map<Position, Location *> LocalMapping;
+using LocalTransitory         = LocalTransitoryTemplate<TaskAllocLocationState, TaskAllocAgentState>;
+using AgentTransition         = AgentTransitionTemplate<TaskAllocLocationState, TaskAllocAgentState>;
+using LocalMapping            = std::map<Position, Location *>;
+using AgentMessage            = AllocAgentMessage;
