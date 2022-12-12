@@ -1,5 +1,5 @@
-#define HEIGHT 1000
-#define WIDTH 1000
+#define HEIGHT 100
+#define WIDTH 100
 #define NUM_AGENTS 1000
 #define NUM_TASKS 5000
 #define TOTAL_DEMAND 7000

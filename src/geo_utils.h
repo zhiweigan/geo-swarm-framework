@@ -8,12 +8,12 @@
 #include "states.h"
 #include "constants.h"
 
-inline std::map<Position, Location *> generate_local_mapping(
+inline std::map<Position, std::pair<Location *, std::vector<AgentMessage>*>> generate_local_mapping(
   Location &vtx, 
   int influence_radius, 
   BasicMap &map)
 {
-  std::map<Position, Location*> ret_map;
+  std::map<Position, std::pair<Location *, std::vector<AgentMessage> *>> ret_map;
   int vx = vtx.loc.x;
   int vy = vtx.loc.y;
 
@@ -23,7 +23,7 @@ inline std::map<Position, Location *> generate_local_mapping(
     {
       int nvx = ((vx + dx) % HEIGHT + HEIGHT) % HEIGHT;
       int nvy = ((vy + dy) % WIDTH + WIDTH) % WIDTH;
-      ret_map.insert(std::make_pair(Position{dx, dy}, map.get_vertex(nvx, nvy)));
+      ret_map.insert(std::make_pair(Position{dx, dy}, std::make_pair(map.get_vertex(nvx, nvy), map.get_messages(nvx, nvy))));
     }
   }
   return ret_map;

@@ -55,7 +55,6 @@ public:
 
   Position loc;
   LocationState state;
-  std::set<int> agents_seen;
 };
 
 template <class AgentState>
@@ -82,6 +81,7 @@ struct AgentTransitionTemplate
   : lstate (lstate_)
   , astate (astate_)
   , dir (Direction::S)
+  , accepted(false)
   { }
 
   AgentTransitionTemplate(
@@ -92,11 +92,13 @@ struct AgentTransitionTemplate
   : lstate(lstate_)
   , astate(astate_)
   , dir(dir_)
+  , accepted(false)
   { }
 
   LocationState lstate;
   AgentState astate;
   Direction dir;
+  bool accepted;
 };
 
-#include "../apps/density/density_states.h"
+#include "../apps/sample/sample_states.h"

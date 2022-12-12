@@ -22,9 +22,9 @@ public:
   Location *find_nearby_task(LocalMapping &local_mapping)
   {
     Location *return_state = nullptr;
-    Position origin = local_mapping[Position{0, 0}]->loc;
+    Position origin = local_mapping[Position{0, 0}].first->loc;
     double min_dist = __DBL_MAX__;
-    for (auto &[pos, vtx] : local_mapping)
+    for (auto &[pos, vtx] : local_mapping.first)
     {
       (void)pos;
       if (vtx->state.is_task && vtx->state.residual_demand > 0)

@@ -1,5 +1,5 @@
 #pragma once
-#include "density_states.h"
+#include "sample_states.h"
 #include "../../src/map.h"
 #include "../../src/constants.h"
 #include "../../src/parlay/random.h"
@@ -19,6 +19,11 @@ public:
   , rgen(std::chrono::system_clock::now().time_since_epoch().count())
   { }
 
+  AgentMessage generate_message(LocalMapping &local_mapping)
+  {
+    return AgentMessage();
+  }
+
   AgentTransition generate_transition(LocalMapping &local_mapping)
   {
     AgentState new_astate = state;
@@ -31,4 +36,4 @@ public:
   parlay::random_generator rgen;
 };
 
-using Agent = AgentTemplate<DensityLocationState, DensityAgentState>;
+using Agent = AgentTemplate<SampleLocationState, SampleAgentState>;

@@ -6,9 +6,9 @@
 #include <map>
 #include "../../src/states.h"
 
-struct DensityLocationState
+struct SampleLocationState
 {
-  DensityLocationState(
+  SampleLocationState(
     Position location_
   )
     : location(location_)
@@ -16,9 +16,9 @@ struct DensityLocationState
   Position location;
 };
 
-struct DensityAgentState
+struct SampleAgentState
 {
-  DensityAgentState(int id_) 
+  SampleAgentState(int id_) 
   : id(id_)
   , count(0)
   , rounds(0)
@@ -29,14 +29,15 @@ struct DensityAgentState
   int rounds = 0;
 };
 
-struct DensityAgentMessage
+struct SampleAgentMessage
 {
 
 };
 
-using Location                = LocationTemplate<DensityLocationState, DensityAgentState>;
-using ProposedAgentTransition = ProposedAgentTransitionTemplate <DensityAgentState>;
-using LocalTransitory         = LocalTransitoryTemplate<DensityLocationState, DensityAgentState>;
-using AgentTransition         = AgentTransitionTemplate<DensityLocationState, DensityAgentState>;
-using LocalMapping            = std::map<Position, Location *>;
-using AgentMessage            = DensityAgentMessage;
+#define MESSAGE
+using Location                = LocationTemplate<SampleLocationState, SampleAgentState>;
+using ProposedAgentTransition = ProposedAgentTransitionTemplate <SampleAgentState>;
+using LocalTransitory         = LocalTransitoryTemplate<SampleLocationState, SampleAgentState>;
+using AgentTransition         = AgentTransitionTemplate<SampleLocationState, SampleAgentState>;
+using AgentMessage            = SampleAgentMessage;
+using LocalMapping            = std::map<Position, std::pair<Location *, std::vector<AgentMessage> *>>;

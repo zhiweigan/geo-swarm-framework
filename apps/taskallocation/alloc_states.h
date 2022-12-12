@@ -59,5 +59,5 @@ using Location                = LocationTemplate<TaskAllocLocationState, TaskAll
 using ProposedAgentTransition = ProposedAgentTransitionTemplate <TaskAllocAgentState>;
 using LocalTransitory         = LocalTransitoryTemplate<TaskAllocLocationState, TaskAllocAgentState>;
 using AgentTransition         = AgentTransitionTemplate<TaskAllocLocationState, TaskAllocAgentState>;
-using LocalMapping            = std::map<Position, Location *>;
 using AgentMessage            = AllocAgentMessage;
+using LocalMapping            = std::map<Position, std::pair<Location *, std::vector<AgentMessage> *>>;
