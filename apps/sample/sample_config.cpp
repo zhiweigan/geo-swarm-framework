@@ -43,8 +43,10 @@ bool Configuration::is_finished()
 
 void Configuration::print_config(int time, int flags)
 {  
-  std::cout << "Percent of Agents in Red: " << std::endl;
+  std::cout << "Percent of Agents in None/Blue/Red: " << std::endl;
   double percent_red = 0;
+  double percent_blue = 0;
+  double percent_none = 0;
 
   std::vector<std::vector<int>> output;
   for (int i = 0; i < n; i++)
@@ -65,9 +67,14 @@ void Configuration::print_config(int time, int flags)
       output[loc.x][loc.y] += 1;
       percent_red += 1;
     }
-    if (agent.state.color == SampleColor::BLUE)
+    else if (agent.state.color == SampleColor::BLUE)
     {
+      percent_blue += 1;
       output[loc.x][loc.y] -= 1;
+    }
+    else 
+    {
+      percent_none += 1;
     }
     output[loc.x][loc.y] = std::max(-9, std::min(9, output[loc.x][loc.y]));
   }
@@ -88,6 +95,8 @@ void Configuration::print_config(int time, int flags)
       std::cout << std::endl;
     }
   }
-  
-  std::cout<< percent_red / agents.size() <<std::endl;
+
+  std::cout << percent_none / agents.size() << std::endl;
+  std::cout << percent_blue / agents.size() << std::endl;
+  std::cout << percent_red / agents.size() <<std::endl;
 }
