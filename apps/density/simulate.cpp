@@ -9,7 +9,6 @@
 int
 main()
 {
-  // TODO: optimize setup
   // constants
   bool verbose = false;
   int n = HEIGHT, m = WIDTH;
@@ -31,9 +30,6 @@ main()
   while (!config.is_finished()) {
     config.transition();
     iter++;
-
-    if (iter > n / 2)
-      break;
 
     if (ITERS > 0 && iter >= ITERS)
       break;

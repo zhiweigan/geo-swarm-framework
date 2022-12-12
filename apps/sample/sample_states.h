@@ -6,6 +6,13 @@
 #include <map>
 #include "../../src/states.h"
 
+enum SampleColor
+{
+  NONE,
+  RED,
+  BLUE,
+};
+
 struct SampleLocationState
 {
   SampleLocationState(
@@ -20,21 +27,20 @@ struct SampleAgentState
 {
   SampleAgentState(int id_) 
   : id(id_)
-  , count(0)
-  , rounds(0)
+  , color(SampleColor::NONE)
   { }
 
   int id;
-  int count = 0;
-  int rounds = 0;
+  SampleColor color;
 };
 
 struct SampleAgentMessage
 {
-
+  SampleColor color;
 };
 
 #define MESSAGE
+#define PRINT_OUT 0x000001
 using Location                = LocationTemplate<SampleLocationState, SampleAgentState>;
 using ProposedAgentTransition = ProposedAgentTransitionTemplate <SampleAgentState>;
 using LocalTransitory         = LocalTransitoryTemplate<SampleLocationState, SampleAgentState>;

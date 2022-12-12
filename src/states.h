@@ -101,4 +101,4 @@ struct AgentTransitionTemplate
   bool accepted;
 };
 
-#include "../apps/alloc/alloc_states.h"
+#include "../apps/sample/sample_states.h"

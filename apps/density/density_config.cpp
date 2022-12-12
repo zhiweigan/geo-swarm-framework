@@ -26,10 +26,10 @@ void Configuration::update_locations()
 
 bool Configuration::is_finished()
 {
-  return false;
+  return rounds >= n / 2;
 }
 
-void Configuration::print_config(int time)
+void Configuration::print_config(int time, int flags)
 {
   std::cout << "Agent Locations: " << std::endl;
   double density_estim = 0;

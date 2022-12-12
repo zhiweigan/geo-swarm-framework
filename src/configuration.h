@@ -24,7 +24,7 @@ public:
   void update_agents();
   void update_locations();
   bool is_finished();
-  void print_config(int time = 0);
+  void print_config(int time = 0, int flags = 0);
 
   // TODO: REMOVE
   void set_task_vertex(Position &pos);
@@ -34,6 +34,7 @@ public:
 
   int n;
   int m;
+  int rounds = 0;
   BasicMap map;
 
   // benchmarking
@@ -43,10 +44,12 @@ public:
   uint64_t messages = 0;
   uint64_t parallel = 0;
 
+  parlay::sequence<Agent> agents;
+
 private:
   int influence_radius = 2;
   
-  parlay::sequence<Agent> agents;
+  
   
   parlay::sequence<AgentTransition> agent_transitions;
 

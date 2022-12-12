@@ -40,6 +40,7 @@ void Configuration::add_agents(std::vector<Position> &agent_pos)
     Agent agent(id++, *map.get_vertex(pos.x, pos.y));
     agents.push_back(agent);
     agent_transitions.push_back(AgentTransition({pos}, {id-1}));
+    agent_messages.push_back(AgentMessage{});
   }
 }
 
@@ -136,6 +137,8 @@ Configuration::transition()
     Position loc = unique_vertices[i]->loc;
     map.get_messages(loc.x, loc.y)->resize(0);
   });
+
+  rounds += 1;
 }
 
 parlay::sequence<Position> *Configuration::get_tasks()

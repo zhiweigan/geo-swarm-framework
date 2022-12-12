@@ -9,7 +9,6 @@
 int
 main()
 {
-  // TODO: optimize setup
   // constants
   bool verbose = false;
   int n = HEIGHT, m = WIDTH;
@@ -18,12 +17,16 @@ main()
   Configuration config(n, m);
   config.init();
 
+  // initialize NUM_AGENTS agents at random locations
   std::vector<Position> agent_pos;
   for (int i = 0; i < num_agents; i++) {
     agent_pos.emplace_back(rand() % n, rand() % m);
   }
   config.add_agents(agent_pos);
   config.parallel_setup();
+
+  config.agents[0].state.color = SampleColor::RED;
+  config.agents[5].state.color = SampleColor::BLUE;
 
   int iter = 0;
   std::cout<<"Starting simulation"<<std::endl;
@@ -32,13 +35,11 @@ main()
     config.transition();
     iter++;
 
-    if (iter > n / 2)
-      break;
-
     if (ITERS > 0 && iter >= ITERS)
       break;
     if (verbose && iter % 100 == 0) {
       std::cout << "Iteration: " << iter <<std::endl;
+      config.print_config(iter, PRINT_OUT);
     }
   }
 

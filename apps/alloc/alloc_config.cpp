@@ -58,7 +58,7 @@ Location *Configuration::get_task(int i)
   return map.get_vertex(task_vertices[i].x, task_vertices[i].y);
 }
 
-void Configuration::print_config(int time)
+void Configuration::print_config(int time, int flags)
 {
   std::cout << "map @ time" << time << std::endl;
   std::vector<std::string> output;
