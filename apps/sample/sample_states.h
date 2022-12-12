@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <set>
+#include <vector>
 #include <map>
 #include "../../src/states.h"
 

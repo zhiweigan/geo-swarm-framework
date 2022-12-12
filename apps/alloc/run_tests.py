@@ -14,6 +14,7 @@ lines_to_map = {
 cores_to_try = [1,2,4,8,16]
 tries = 5
 results = {}
+os.chdir("../../")
 for cores in cores_to_try:
   checking = 0
   sorting = 0
@@ -31,6 +32,7 @@ for cores in cores_to_try:
     'total': 0 
   }
 
+  
   for t in range(tries):
     print("On cores:", cores, "try:", t)
     os.putenv('PARLAY_NUM_THREADS', str(cores))

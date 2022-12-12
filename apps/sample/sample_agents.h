@@ -27,7 +27,7 @@ public:
   AgentTransition generate_transition(LocalMapping &local_mapping)
   {
     int num_red = 0;
-    for (int i = 0; i < local_mapping[{0, 0}].second->size(); i++)
+    for (uint i = 0; i < local_mapping[{0, 0}].second->size(); i++)
     {
       SampleColor col = local_mapping[{0, 0}].second->at(i).color;
       if (col == SampleColor::RED) num_red += 1;
