@@ -101,4 +101,4 @@ struct AgentTransitionTemplate
   bool accepted;
 };
 
-#include "../apps/density/density_states.h"
+#include "../apps/alloc/alloc_states.h"

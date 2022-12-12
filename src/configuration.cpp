@@ -76,7 +76,7 @@ Configuration::transition()
 
   // get offsets of differences in sorted array
   auto offset_filter = [&](int x) { return x != 0; };
-  size_t num_unique_locations = parlay::filter_into_uninitialized(loc_diff, offsets, offset_filter);
+  num_unique_locations = parlay::filter_into_uninitialized(loc_diff, offsets, offset_filter);
 
   // save the unique vertices into an array for future use
   parlay::parallel_for(0, num_unique_locations, [&](size_t i)

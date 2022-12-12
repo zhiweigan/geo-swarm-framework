@@ -30,6 +30,7 @@ public:
   void set_task_vertex(Position &pos);
   Location *get_task(int i);
   parlay::sequence<Position> *get_tasks();
+  size_t num_unique_locations;
 
   int n;
   int m;

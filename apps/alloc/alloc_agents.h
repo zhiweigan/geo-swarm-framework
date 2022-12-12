@@ -24,9 +24,10 @@ public:
     Location *return_state = nullptr;
     Position origin = local_mapping[Position{0, 0}].first->loc;
     double min_dist = __DBL_MAX__;
-    for (auto &[pos, vtx] : local_mapping.first)
+    for (auto &[pos, local] : local_mapping)
     {
       (void)pos;
+      auto vtx = local.first;
       if (vtx->state.is_task && vtx->state.residual_demand > 0)
       {
         double dist = l2_distance(origin.x, origin.y, vtx->loc.x, vtx->loc.y);

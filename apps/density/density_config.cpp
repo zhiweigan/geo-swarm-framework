@@ -7,13 +7,15 @@
 void Configuration::update_agents()
 {
   parlay::parallel_for(0, agent_ids.size(), [&](int i)
-                       {
+  {
     auto &transition = agent_transitions[i];
     transition.astate.count += counts[is_diff[i]+1] - counts[is_diff[i]] - 1;
     transition.astate.rounds += 1;
     agents[agent_ids[i]].state = transition.astate;
     Position pos = get_coords_from_movement(agents[agent_ids[i]].loc->loc, transition.dir);
-    agents[agent_ids[i]].loc = map.get_vertex(pos.x, pos.y); });
+    agents[agent_ids[i]].loc = map.get_vertex(pos.x, pos.y); 
+    transition.accepted = true;
+  });
 }
 
 void Configuration::custom_setup()

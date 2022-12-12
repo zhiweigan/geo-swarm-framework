@@ -30,7 +30,7 @@ struct TaskAllocLocationState
 
 struct TaskAllocAgentState
 {
-  TaskAllocAgentState() {}
+  TaskAllocAgentState(int id_): id(id_) {}
   TaskAllocAgentState(int id_, LocationTemplate<TaskAllocLocationState, TaskAllocAgentState> &v_, double l_) 
   : core_state("None")
   , id(id_)
