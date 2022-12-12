@@ -10,7 +10,7 @@ int
 main()
 {
   // constants
-  bool verbose = false;
+  bool verbose = true;
   int n = HEIGHT, m = WIDTH;
   int num_agents = NUM_AGENTS;
 
@@ -39,7 +39,7 @@ main()
       break;
     if (verbose && iter % 100 == 0) {
       std::cout << "Iteration: " << iter <<std::endl;
-      config.print_config(iter, PRINT_OUT);
+      config.print_config(iter);
     }
   }
 
