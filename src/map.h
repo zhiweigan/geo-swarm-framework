@@ -24,10 +24,8 @@ public:
   void set_transition(int x, int y, LocalTransitory &&transition);
   LocalTransitory *get_transition(int x, int y);
 
-#ifdef MESSAGE
   void add_message(int x, int y, AgentMessage &&message);
   std::vector<AgentMessage> *get_messages(int x, int y);
-#endif
 
   bool in_bounds(int x, int y);
   

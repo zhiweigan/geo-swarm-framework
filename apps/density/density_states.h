@@ -38,5 +38,5 @@ using Location                = LocationTemplate<DensityLocationState, DensityAg
 using ProposedAgentTransition = ProposedAgentTransitionTemplate <DensityAgentState>;
 using LocalTransitory         = LocalTransitoryTemplate<DensityLocationState, DensityAgentState>;
 using AgentTransition         = AgentTransitionTemplate<DensityLocationState, DensityAgentState>;
-using AgentMessage = DensityAgentMessage;
+using AgentMessage            = DensityAgentMessage;
 using LocalMapping            = std::map<Position, std::pair<Location *, std::vector<AgentMessage>*>>;

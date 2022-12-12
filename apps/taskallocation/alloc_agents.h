@@ -40,6 +40,11 @@ public:
     return return_state;
   }
 
+  AgentMessage generate_message(LocalMapping &local_mapping)
+  {
+    return AgentMessage();
+  }
+
   AgentTransition generate_transition(LocalMapping &local_mapping)
   {
     AgentState new_astate = state;
