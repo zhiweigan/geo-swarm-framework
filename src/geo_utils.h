@@ -29,22 +29,27 @@ inline std::map<Position, std::pair<Location *, std::vector<AgentMessage>*>> gen
   return ret_map;
 }
 
+inline int mod(int a, int b)
+{
+  return (a % b + b) % b;
+}
+
 inline Position get_coords_from_movement(Position pos, Direction dir, bool ignore_bound = false)
 {
   switch(dir) {
     case Direction::S:
       return pos;
     case Direction::L:
-      pos.x = (pos.x - 1) % HEIGHT;
+      pos.x = mod(pos.x - 1, HEIGHT);
       return pos;
     case Direction::R:
-      pos.x = (pos.x + 1) % HEIGHT;
+      pos.x = mod(pos.x + 1, HEIGHT);
       return pos;
     case Direction::D:
-      pos.y = (pos.y - 1) % WIDTH;
+      pos.y = mod(pos.y - 1, WIDTH);
       return pos;
     case Direction::U:
-      pos.y = (pos.y + 1) % WIDTH;
+      pos.y = mod(pos.y + 1, WIDTH);
       return pos;
     case Direction::LAST:
       return pos;
