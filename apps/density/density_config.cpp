@@ -36,7 +36,9 @@ void Configuration::print_config(int time, int flags)
   for (auto agent : agents)
   {
     double estim = (double)agent.state.count / (double)agent.state.rounds;
+    std::cout<<estim<<", ";
     density_estim += estim;
   }
+  std::cout<<std::endl;
   std::cout << density_estim / agents.size() << std::endl;
 }
