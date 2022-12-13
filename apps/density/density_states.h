@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <string>
 #include <iostream>
+#include <vector>
 #include <set>
 #include <map>
 #include "../../src/states.h"
