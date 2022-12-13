@@ -14,7 +14,7 @@ struct DensityLocationState
   )
     : location(location_)
   { }
-  Position location;
+  Position location; // required
 };
 
 struct DensityAgentState
@@ -25,7 +25,7 @@ struct DensityAgentState
   , rounds(0)
   { }
 
-  int id;
+  int id; //required
   int count = 0;
   int rounds = 0;
 };

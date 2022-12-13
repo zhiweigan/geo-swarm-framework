@@ -21,9 +21,8 @@ public:
 
   AgentTransition generate_transition(LocalMapping &local_mapping)
   {
-    AgentState new_astate = state;
     Direction new_dir = static_cast<Direction>((rgen() % 4) + 1);
-    return AgentTransition(loc->state, std::move(new_astate), new_dir);
+    return AgentTransition(loc->state, state, new_dir);
   }
 
   Location *loc;
