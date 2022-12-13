@@ -1,1 +1,1 @@
-#include "../apps/sample/sample_agents.h"
+#include "../apps/density/density_agents.h"
