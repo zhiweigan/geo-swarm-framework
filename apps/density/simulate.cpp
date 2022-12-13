@@ -31,7 +31,7 @@ main()
     config.transition();
     iter++;
 
-    if (ITERS > 0 && iter >= ITERS)
+    if (MAX_ITERS > 0 && iter >= MAX_ITERS)
       break;
     if (verbose && iter % 100 == 0) {
       std::cout << "Iteration: " << iter <<std::endl;
