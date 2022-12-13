@@ -26,7 +26,7 @@ main()
   config.parallel_setup();
 
   config.agents[0].state.color = SampleColor::RED;
-  config.agents[5].state.color = SampleColor::BLUE;
+  config.agents[1].state.color = SampleColor::BLUE;
 
   int iter = 0;
   std::cout<<"Starting simulation"<<std::endl;
