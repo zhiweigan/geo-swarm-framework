@@ -1,9 +1,9 @@
-#define HEIGHT 1000
-#define WIDTH 1000
-#define NUM_AGENTS 100000
+#define HEIGHT 100
+#define WIDTH 100
+#define NUM_AGENTS 50
 #define MAX_ITERS 5000
 #define VERBOSE true
 
 // TASK SPECIFIC
-#define NUM_TASKS 5000
-#define TOTAL_DEMAND 7000
+#define NUM_TASKS 16
+#define TOTAL_DEMAND 80

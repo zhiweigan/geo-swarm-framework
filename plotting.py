@@ -76,6 +76,7 @@ fig = plt.figure()
 ax = plt.subplot(111)
 for key, values in legend.items():
   if key == 'checking': continue
+  if key == 'Iterations': continue
   values_x, values_y = zip(*values)
   ax.plot(values_x, values_y, label=key)
 box = ax.get_position()

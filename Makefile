@@ -2,7 +2,7 @@
 TARGET_EXEC := final_program
 
 BUILD_DIR := ./build
-SRC_DIRS := ./src ./apps/sample
+SRC_DIRS := ./src ./apps/alloc
 
 CC = g++
 
