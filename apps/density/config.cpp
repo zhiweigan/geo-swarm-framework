@@ -18,6 +18,9 @@ void Configuration::update_agents()
   });
 }
 
+Configuration::~Configuration() 
+{ }
+
 void Configuration::custom_setup()
 { }
 
