@@ -1,16 +1,15 @@
-#include "agent.h"
+#include <agents.h>
 #include "map.h"
-#include "states.h"
-#include "constants.h"
-#include "parlay/sequence.h"
+#include <states.h>
+#include <parlay/sequence.h>
 #include <chrono>
-
 
 class Configuration {
 public:
-  Configuration(int n_, int m_)
+  Configuration(int n_, int m_, int inf_ = 2)
   : n(n_)
   , m(m_)
+  , influence_radius(inf_)
   , map(n_, m_) 
   { }
 
@@ -49,8 +48,6 @@ public:
 private:
   int influence_radius = 2;
   
-  
-  
   parlay::sequence<AgentTransition> agent_transitions;
   parlay::sequence<AgentMessage> agent_messages;
 
@@ -69,3 +66,6 @@ private:
   parlay::sequence<int> agent_ids;
   parlay::sequence<int> removed_agent_ids;
 };
+
+// #include "configuration.tpp"
+// #include "../apps/sample/sample_config.tpp"

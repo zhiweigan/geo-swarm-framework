@@ -1,9 +1,9 @@
 #include <chrono>
 
-#include "../../src/map.h"
-#include "../../src/geo_utils.h"
-#include "../../src/configuration.h"
-#include "../../src/parlay/primitives.h"
+#include <map.h>
+#include <geo_utils.h>
+#include <configuration.h>
+#include <parlay/primitives.h>
 
 // run a small test case
 int

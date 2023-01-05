@@ -5,8 +5,8 @@
 
 #include <string>
 #include "map.h"
-#include "states.h"
-#include "constants.h"
+#include <states.h>
+#include <constants.h>
 
 inline std::map<Position, std::pair<Location *, std::vector<AgentMessage>*>> generate_local_mapping(
   Location &vtx, 

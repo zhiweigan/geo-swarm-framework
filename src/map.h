@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "states.h"
+#include <states.h>
 
 class BasicMap
 {

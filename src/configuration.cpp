@@ -1,7 +1,7 @@
 #include "configuration.h"
 #include "geo_utils.h"
-#include "parlay/parallel.h"
-#include "parlay/primitives.h"
+#include <parlay/parallel.h>
+#include <parlay/primitives.h>
 #include <set>
 
 void Configuration::init()
@@ -29,9 +29,11 @@ void Configuration::parallel_setup()
     agent_ids.push_back(agent.state.id);
     removed_agent_ids.push_back(-1);
   }
+  // some extra space has to be allocated for prefix sums
+  counts.push_back(0);
+  is_diff.push_back(0);
 }
 
-// add new function to set up parallelism, based on HEIGHT, WIDTH, NUMAGENTS
 void Configuration::add_agents(std::vector<Position> &agent_pos) 
 {
   int id = 0;
