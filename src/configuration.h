@@ -1,8 +1,10 @@
 #include <agents.h>
 #include "map.h"
 #include <states.h>
+#include <constants.h>
 #include <parlay/sequence.h>
 #include <chrono>
+
 
 class Configuration {
 public:
@@ -12,6 +14,7 @@ public:
   , influence_radius(inf_)
   , map(n_, m_) 
   { }
+  ~Configuration();
 
   void init();
   void add_agents(std::vector<Position> &agent_pos);
@@ -19,7 +22,10 @@ public:
   Location *get_vertex(int x, int y);
   void parallel_setup();
 
+  struct UserDefined;
+  UserDefined* custom = 0;
   void custom_setup();
+
   void update_agents();
   void update_locations();
   bool is_finished();
@@ -65,7 +71,8 @@ private:
 
   parlay::sequence<int> agent_ids;
   parlay::sequence<int> removed_agent_ids;
-};
 
-// #include "configuration.tpp"
-// #include "../apps/sample/sample_config.tpp"
+#ifdef ADD_SPACE_REQ
+  void* extra[ADD_SPACE_REQ];
+#endif
+};

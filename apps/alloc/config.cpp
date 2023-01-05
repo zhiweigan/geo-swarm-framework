@@ -4,7 +4,22 @@
 #include <parlay/primitives.h>
 #include <set>
 
-void Configuration::custom_setup() {}
+struct Configuration::UserDefined
+{
+  parlay::sequence<int> filter_space;
+};
+
+// must be defined here so the type is complete
+Configuration::~Configuration() { delete custom; }
+
+void Configuration::custom_setup()
+{
+  custom = new UserDefined();
+  for(int i = 0; i < NUM_AGENTS; i++)
+  {
+    custom->filter_space.push_back(0);
+  }
+}
 
 void Configuration::update_agents()
 {
@@ -21,10 +36,12 @@ void Configuration::update_agents()
       transition.accepted = true;
     } 
   });
-  agent_ids = parlay::filter(agent_ids, [&](int agent)
+  int num_agents_left = parlay::filter_into_uninitialized(agent_ids, custom->filter_space, [&](int agent)
   { 
     return agents[agent].state.committed_task == nullptr; 
   });
+  custom->filter_space.resize(num_agents_left);
+  agent_ids = custom->filter_space;
 }
 
 void Configuration::update_locations()
