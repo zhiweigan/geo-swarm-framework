@@ -3,9 +3,9 @@
 Introduction: TODO
 
 ## How to: Build & Run
-```
+```bash
 cd build/
-cmake .. -DAPP=density
+cmake .. -DAPP=density # name of application folder
 make
 ./density
 ```
