@@ -44,9 +44,11 @@ void Configuration::update_agents()
   agent_ids = custom->filter_space;
 }
 
+// give helper functions for which agents at each location
+// make slices if necessary
 void Configuration::update_locations()
 {
-  // update location states based on accepted agent transitions?
+  // this function should mark which transitions should be accepted?
   parlay::parallel_for(0, num_unique_locations, [&](int i)
   {
     if (unique_vertices[i]->state.is_task)

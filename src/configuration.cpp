@@ -81,6 +81,8 @@ Configuration::transition()
   auto offset_filter = [&](int x) { return x != 0; };
   num_unique_locations = parlay::filter_into_uninitialized(loc_diff, offsets, offset_filter);
 
+  // if num locations << num agents this doesnt work well
+  // make this an option
   // save the unique vertices into an array for future use
   parlay::parallel_for(0, num_unique_locations, [&](size_t i)
   { 
@@ -128,8 +130,8 @@ Configuration::transition()
 
   // get array differecnes
   auto update_start = std::chrono::high_resolution_clock::now();
-  update_agents();
-  update_locations();
+  update_agents(); // loop over agents
+  update_locations(); // loop over this, make this an option? maybe locations don't have to be updated if compiler doesn't do it
   auto update_end = std::chrono::high_resolution_clock::now();
   update += std::chrono::duration_cast<std::chrono::nanoseconds>(update_end - update_start).count();
 

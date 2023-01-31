@@ -25,7 +25,9 @@ void Configuration::custom_setup()
 { }
 
 void Configuration::update_locations()
-{ }
+{ 
+  // accept every transition
+}
 
 bool Configuration::is_finished()
 {
