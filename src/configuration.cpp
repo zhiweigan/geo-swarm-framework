@@ -130,8 +130,14 @@ Configuration::transition()
 
   // get array differecnes
   auto update_start = std::chrono::high_resolution_clock::now();
-  update_agents(); // loop over agents
-  update_locations(); // loop over this, make this an option? maybe locations don't have to be updated if compiler doesn't do it
+  parlay::parallel_for(0, num_unique_locations, [&](int i)
+  {
+    update_location(i);
+  });
+  parlay::parallel_for(0, agent_ids.size(), [&](int i)
+  { 
+    update_agent(i); 
+  });
   auto update_end = std::chrono::high_resolution_clock::now();
   update += std::chrono::duration_cast<std::chrono::nanoseconds>(update_end - update_start).count();
 

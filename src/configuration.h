@@ -26,10 +26,11 @@ public:
   UserDefined* custom = 0;
   void custom_setup();
 
-  void update_agents();
-  void update_locations();
+  void update_agent(int i);
+  // void update_location(Location * loc, );
   bool is_finished();
   void print_config(int time = 0, int flags = 0);
+  parlay::slice<> get_agents_at_loc(Location* loc);
 
   // TODO: REMOVE
   void set_task_vertex(Position &pos);
@@ -71,8 +72,4 @@ private:
 
   parlay::sequence<int> agent_ids;
   parlay::sequence<int> removed_agent_ids;
-
-#ifdef ADD_SPACE_REQ
-  void* extra[ADD_SPACE_REQ];
-#endif
 };

@@ -4,7 +4,7 @@
 #include <parlay/primitives.h>
 #include <set>
 
-void Configuration::update_agents()
+void Configuration::update_agent(int i)
 {
   parlay::parallel_for(0, agent_ids.size(), [&](int i) 
   {
@@ -24,9 +24,12 @@ Configuration::~Configuration()
 void Configuration::custom_setup()
 { }
 
-void Configuration::update_locations()
+void Configuration::update_location(int i)
 { 
   // accept every transition
+  // get agents on location
+  // get location
+  // loop over agents, and accept every transition
 }
 
 bool Configuration::is_finished()

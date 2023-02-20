@@ -124,8 +124,3 @@ public:
 };
 
 using Agent = AgentTemplate<TaskAllocLocationState, TaskAllocAgentState>;
-
-struct AgentLists
-{
-  parlay::sequence<Agent> agents;
-};
