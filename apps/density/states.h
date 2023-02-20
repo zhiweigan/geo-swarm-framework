@@ -34,9 +34,7 @@ struct DensityAgentMessage
 
 };
 
-using Location                = LocationTemplate<DensityLocationState, DensityAgentState>;
-using ProposedAgentTransition = ProposedAgentTransitionTemplate <DensityAgentState>;
-using LocalTransitory         = LocalTransitoryTemplate<DensityLocationState, DensityAgentState>;
+using Location                = LocationTemplate<DensityLocationState>;
 using AgentTransition         = AgentTransitionTemplate<DensityLocationState, DensityAgentState>;
 using AgentMessage            = DensityAgentMessage;
 using LocalMapping            = std::map<Position, std::pair<Location *, std::vector<AgentMessage>*>>;

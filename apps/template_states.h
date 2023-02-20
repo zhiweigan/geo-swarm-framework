@@ -44,7 +44,7 @@ struct Position {
   }
 };
 
-template<class LocationState, class AgentState>
+template<class LocationState>
 class LocationTemplate
 {
 public:
@@ -55,20 +55,6 @@ public:
 
   Position loc;
   LocationState state;
-};
-
-template <class AgentState>
-struct ProposedAgentTransitionTemplate
-{
-  AgentState astate;
-  Direction dir;
-};
-
-template <class LocationState, class AgentState>
-struct LocalTransitoryTemplate
-{
-  LocationState loc_state;
-  std::map<int, ProposedAgentTransitionTemplate<AgentState>> agent_updates;
 };
 
 template <class LocationState, class AgentState>

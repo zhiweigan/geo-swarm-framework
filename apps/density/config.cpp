@@ -30,6 +30,7 @@ void Configuration::update_location(int i)
   // get agents on location
   // get location
   // loop over agents, and accept every transition
+  // update every transition
 }
 
 bool Configuration::is_finished()

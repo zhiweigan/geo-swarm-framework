@@ -31,7 +31,7 @@ struct TaskAllocLocationState
 struct TaskAllocAgentState
 {
   TaskAllocAgentState(int id_): id(id_) {}
-  TaskAllocAgentState(int id_, LocationTemplate<TaskAllocLocationState, TaskAllocAgentState> &v_, double l_) 
+  TaskAllocAgentState(int id_, LocationTemplate<TaskAllocLocationState> &v_, double l_) 
   : core_state("None")
   , id(id_)
   , levy_cap(l_)
@@ -46,8 +46,8 @@ struct TaskAllocAgentState
   double angle;
   int travel_distance;
   Position starting_point;
-  LocationTemplate<TaskAllocLocationState, TaskAllocAgentState> *committed_task = nullptr;
-  LocationTemplate<TaskAllocLocationState, TaskAllocAgentState> *destination_task = nullptr;
+  LocationTemplate<TaskAllocLocationState> *committed_task = nullptr;
+  LocationTemplate<TaskAllocLocationState> *destination_task = nullptr;
 };
 
 struct AllocAgentMessage
@@ -55,9 +55,7 @@ struct AllocAgentMessage
 
 };
 
-using Location                = LocationTemplate<TaskAllocLocationState, TaskAllocAgentState>;
-using ProposedAgentTransition = ProposedAgentTransitionTemplate <TaskAllocAgentState>;
-using LocalTransitory         = LocalTransitoryTemplate<TaskAllocLocationState, TaskAllocAgentState>;
+using Location                = LocationTemplate<TaskAllocLocationState>;
 using AgentTransition         = AgentTransitionTemplate<TaskAllocLocationState, TaskAllocAgentState>;
 using AgentMessage            = AllocAgentMessage;
 using LocalMapping            = std::map<Position, std::pair<Location *, std::vector<AgentMessage> *>>;

@@ -35,6 +35,17 @@ struct SampleAgentState
   SampleColor color;
 };
 
+struct SampleAgentStateCopy
+{
+  SampleAgentStateCopy(int id_)
+  : id(id_)
+  , color(SampleColor::NONE)
+  { }
+
+  int id;
+  SampleColor color;
+};
+
 struct SampleAgentMessage
 {
   SampleColor color;
@@ -42,9 +53,8 @@ struct SampleAgentMessage
 
 #define MESSAGE
 #define PRINT_OUT 0x000001
-using Location                = LocationTemplate<SampleLocationState, SampleAgentState>;
-using ProposedAgentTransition = ProposedAgentTransitionTemplate <SampleAgentState>;
-using LocalTransitory         = LocalTransitoryTemplate<SampleLocationState, SampleAgentState>;
+using Location                = LocationTemplate<SampleLocationState>;
 using AgentTransition         = AgentTransitionTemplate<SampleLocationState, SampleAgentState>;
+using AgentTransitionCopy     = AgentTransitionTemplate<SampleLocationState, SampleAgentStateCopy>;
 using AgentMessage            = SampleAgentMessage;
 using LocalMapping            = std::map<Position, std::pair<Location *, std::vector<AgentMessage> *>>;

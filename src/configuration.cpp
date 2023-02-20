@@ -160,3 +160,13 @@ Location *Configuration::get_vertex(int x, int y)
 {
   return map.get_vertex(x, y);
 }
+
+parlay::slice<int*, int*> Configuration::getAgentsAtUniqueLocation(int i)
+{
+  return agent_ids.cut(counts[i], counts[i+1]);
+}
+
+parlay::slice<int*, int*> Configuration::getAgentsNextToAgent(int i)
+{
+  return agent_ids.cut(counts[is_diff[i]], counts[is_diff[i]+1]);
+}

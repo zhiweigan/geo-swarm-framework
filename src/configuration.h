@@ -26,11 +26,17 @@ public:
   UserDefined* custom = 0;
   void custom_setup();
 
-  void update_agent(int i);
-  // void update_location(Location * loc, );
+  // ------------- HELPERS -------------
+
+  parlay::slice<int*, int*> getAgentsAtUniqueLocation(int i);
+  parlay::slice<int*, int*> getAgentsNextToAgent(int i);
+
+  // -----------------------------------
+
+  void update_agent();
+  void update_location();
   bool is_finished();
   void print_config(int time = 0, int flags = 0);
-  parlay::slice<> get_agents_at_loc(Location* loc);
 
   // TODO: REMOVE
   void set_task_vertex(Position &pos);
