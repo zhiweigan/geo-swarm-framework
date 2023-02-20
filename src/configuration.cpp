@@ -28,10 +28,12 @@ void Configuration::parallel_setup()
     counts.push_back(0);
     agent_ids.push_back(agent.state.id);
     removed_agent_ids.push_back(-1);
+    filter_space.push_back(0);
   }
   // some extra space has to be allocated for prefix sums
   counts.push_back(0);
   is_diff.push_back(0);
+  filter_space.push_back(0);
 }
 
 void Configuration::add_agents(std::vector<Position> &agent_pos) 
@@ -132,12 +134,18 @@ Configuration::transition()
   auto update_start = std::chrono::high_resolution_clock::now();
   parlay::parallel_for(0, num_unique_locations, [&](int i)
   {
-    update_location(i);
+    update_location(unique_vertices[i], getAgentsAtUniqueLocation(i));
   });
   parlay::parallel_for(0, agent_ids.size(), [&](int i)
   { 
     update_agent(i); 
   });
+  int num_agents_left = parlay::filter_into_uninitialized(agent_ids, filter_space, [&](int agent)
+  { 
+    return agents[agent].active == true; 
+  });
+  filter_space.resize(num_agents_left);
+  agent_ids = filter_space;
   auto update_end = std::chrono::high_resolution_clock::now();
   update += std::chrono::duration_cast<std::chrono::nanoseconds>(update_end - update_start).count();
 
@@ -169,4 +177,9 @@ parlay::slice<int*, int*> Configuration::getAgentsAtUniqueLocation(int i)
 parlay::slice<int*, int*> Configuration::getAgentsNextToAgent(int i)
 {
   return agent_ids.cut(counts[is_diff[i]], counts[is_diff[i]+1]);
+}
+
+void loopOverAgents(parlay::slice<int *, int *> agents, const std::function<void(int)> &f)
+{
+  parlay::parallel_for(0, agents.size(), f);
 }

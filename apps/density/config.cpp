@@ -24,13 +24,10 @@ Configuration::~Configuration()
 void Configuration::custom_setup()
 { }
 
-void Configuration::update_location(int i)
+void Configuration::update_location(Location *loc, parlay::slice<int *, int *> agents)
 { 
   // accept every transition
-  // get agents on location
-  // get location
   // loop over agents, and accept every transition
-  // update every transition
 }
 
 bool Configuration::is_finished()

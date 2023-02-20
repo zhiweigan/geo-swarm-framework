@@ -2,6 +2,7 @@
 #include "map.h"
 #include <states.h>
 #include <constants.h>
+#include <functional>
 #include <parlay/sequence.h>
 #include <chrono>
 
@@ -30,11 +31,12 @@ public:
 
   parlay::slice<int*, int*> getAgentsAtUniqueLocation(int i);
   parlay::slice<int*, int*> getAgentsNextToAgent(int i);
+  void loopOverAgents(parlay::slice<int *, int *> agents, const std::function<void(int)> &f);
 
   // -----------------------------------
 
-  void update_agent();
-  void update_location();
+  void update_agent(int i);
+  void update_location(Location *loc, parlay::slice<int *, int *> agents);
   bool is_finished();
   void print_config(int time = 0, int flags = 0);
 
@@ -73,6 +75,7 @@ private:
   parlay::sequence<int> agent_offset;
   parlay::sequence<int> individual_agent;
   parlay::sequence<int> offsets;
+  parlay::sequence<int> filter_space;
   parlay::sequence<int> counts;
   parlay::sequence<Location*> unique_vertices;
 

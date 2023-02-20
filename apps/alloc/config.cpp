@@ -4,57 +4,34 @@
 #include <parlay/primitives.h>
 #include <set>
 
-struct Configuration::UserDefined
-{
-  parlay::sequence<int> filter_space;
-};
-
 // must be defined here so the type is complete
-Configuration::~Configuration() { delete custom; }
+Configuration::~Configuration() { }
 
 void Configuration::custom_setup()
+{ }
+
+void Configuration::update_agent(int i)
 {
-  custom = new UserDefined();
-  for(int i = 0; i < NUM_AGENTS; i++)
+  auto &transition = agent_transitions[i];
+  if (agent_transitions[i].accepted)
   {
-    custom->filter_space.push_back(0);
+    agents[agent_ids[i]].state = transition.astate;
+    Position pos = get_coords_from_movement(agents[agent_ids[i]].loc->loc, transition.dir);
+    agents[agent_ids[i]].loc = map.get_vertex(pos.x, pos.y);
+  }
+  if (agents[agent_ids[i]].state.committed_task != nullptr)
+  {
+    agents[agent_ids[i]].active = false;
   }
 }
 
-void Configuration::update_agents()
+void Configuration::update_location(Location *loc, parlay::slice<int *, int *> agents)
 {
-  // handle agents that need to move
-  parlay::parallel_for(0, agent_ids.size(), [&](int i)
-  {
-    if (!agents[agent_ids[i]].loc->state.is_task ||
-        (agents[agent_ids[i]].loc->state.is_task && i <= counts[is_diff[i]] + agents[agent_ids[i]].loc->state.residual_demand))
+  loopOverAgents(agents, [&](int i) {
+    if (i < loc->state.residual_demand)
     {
-      auto &transition = agent_transitions[i];
-      agents[agent_ids[i]].state = transition.astate;
-      Position pos = get_coords_from_movement(agents[agent_ids[i]].loc->loc, transition.dir);
-      agents[agent_ids[i]].loc = map.get_vertex(pos.x, pos.y);
-      transition.accepted = true;
-    } 
-  });
-  int num_agents_left = parlay::filter_into_uninitialized(agent_ids, custom->filter_space, [&](int agent)
-  { 
-    return agents[agent].state.committed_task == nullptr; 
-  });
-  custom->filter_space.resize(num_agents_left);
-  agent_ids = custom->filter_space;
-}
-
-// give helper functions for which agents at each location
-// make slices if necessary
-void Configuration::update_locations()
-{
-  // this function should mark which transitions should be accepted?
-  parlay::parallel_for(0, num_unique_locations, [&](int i)
-  {
-    if (unique_vertices[i]->state.is_task)
-    {
-      unique_vertices[i]->state.residual_demand -= std::min(counts[i+1]-counts[i], unique_vertices[i]->state.residual_demand);
-    } 
+      agent_transitions[i].accepted = true;
+    }
   });
 }
 

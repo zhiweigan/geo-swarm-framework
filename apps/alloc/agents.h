@@ -17,6 +17,7 @@ public:
   : loc(&loc_)
   , state(AgentState(id_, loc_, 0.0))
   , rgen(std::chrono::system_clock::now().time_since_epoch().count())
+  , active(true)
   { }
 
   Location *find_nearby_task(LocalMapping &local_mapping)
@@ -118,6 +119,7 @@ public:
     return x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH;
   }
 
+  bool active;
   Location *loc;
   AgentState state;
   parlay::random_generator rgen;
