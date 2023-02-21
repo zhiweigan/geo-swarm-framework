@@ -23,3 +23,7 @@ list(APPEND SOURCES apps/${APP}/config.cpp apps/${APP}/simulate.cpp)
 
 # Add the executable and specify the sources
 add_executable(${APP} ${SOURCES})
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+target_link_libraries(${APP} PRIVATE Threads::Threads)
