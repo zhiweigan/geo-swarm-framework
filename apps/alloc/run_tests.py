@@ -14,7 +14,7 @@ lines_to_map = {
 cores_to_try = [1,2,4,8,16]
 tries = 5
 results = {}
-os.chdir("../../")
+os.chdir("../../build")
 for cores in cores_to_try:
   checking = 0
   sorting = 0
@@ -38,7 +38,7 @@ for cores in cores_to_try:
     os.putenv('PARLAY_NUM_THREADS', str(cores))
     subprocess.run(['make', 'clean'], stdout=subprocess.PIPE)
     subprocess.run(['make', '-j12'], stdout=subprocess.PIPE)
-    result = subprocess.run(['build/final_program'], stdout=subprocess.PIPE)
+    result = subprocess.run(['./alloc'], stdout=subprocess.PIPE)
     lines = result.stdout.split(b'\n')
 
     for line_num in range(1, len(lines)-1):
