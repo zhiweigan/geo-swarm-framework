@@ -4,6 +4,7 @@
 #include <iostream>
 #include <set>
 #include <map>
+#include <vector>
 
 enum Direction {
   S, L, R, D, U, LAST
