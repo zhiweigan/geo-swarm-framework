@@ -64,7 +64,7 @@ main()
       break;
     if (verbose && iter % 100 == 0) {
       std::cout << "Iteration: " << iter <<std::endl;
-      // config.print_config();
+      config.print_config();
     }
   }
 
