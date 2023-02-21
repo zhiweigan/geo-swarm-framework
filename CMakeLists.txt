@@ -16,7 +16,7 @@ set(APP "sample" CACHE STRING "Name of project in the apps directory")
 include_directories(apps/${APP})
 
 # Set the policy for the PROJECT_NAME variable
-cmake_policy(SET CMP0077 NEW)
+# cmake_policy(SET CMP0077 NEW)
 
 # Add the project source files to the list of sources
 list(APPEND SOURCES apps/${APP}/config.cpp apps/${APP}/simulate.cpp)
