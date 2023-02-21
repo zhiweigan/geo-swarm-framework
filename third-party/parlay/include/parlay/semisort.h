@@ -144,7 +144,7 @@ sequence<s_size_t> semisort_equal_(slice<InIterator, InIterator> In, slice<OutIt
     return heavy_id[idx].second;
   };
 
-  if (parallelism == 1.0) t.next("sampling");
+  // if (parallelism == 1.0) t.next("sampling");
 
   internal::timer t_dis;
 
@@ -186,7 +186,7 @@ sequence<s_size_t> semisort_equal_(slice<InIterator, InIterator> In, slice<OutIt
 
   // if (parallelism == 1.0) t_dis.next("component of distribute: copy");
 
-  if (parallelism == 1.0) t.next("distribute");
+  // if (parallelism == 1.0) t.next("distribute");
 
   // 3. sort within each bucket
   sequence<sequence<s_size_t>> inner_offsets;
@@ -212,7 +212,7 @@ sequence<s_size_t> semisort_equal_(slice<InIterator, InIterator> In, slice<OutIt
       },
       1);
 
-  if (parallelism == 1.0) t.next("local sort");
+  // if (parallelism == 1.0) t.next("local sort");
 
   sequence<s_size_t> offsets;
   if (return_offsets) {
@@ -220,7 +220,7 @@ sequence<s_size_t> semisort_equal_(slice<InIterator, InIterator> In, slice<OutIt
         tabulate<s_size_t>(heavy_buckets, [&](size_t i) { return bucket_offsets[i + light_buckets]; });
     offsets = flatten(inner_offsets);
   }
-  if (parallelism == 1.0) t.next("compute offsets");
+  // if (parallelism == 1.0) t.next("compute offsets");
   return offsets;
 }
 
@@ -291,7 +291,7 @@ sequence<s_size_t> semisort_less_(slice<InIterator, InIterator> In, slice<OutIte
     return offsets;
   }
 
-  internal::timer t;
+  // internal::timer t;
 
   // 1. sampling
   auto heavy_seq = sample_heavy_keys(In, g, hash, equal, shift_bits);
@@ -313,7 +313,7 @@ sequence<s_size_t> semisort_less_(slice<InIterator, InIterator> In, slice<OutIte
     return heavy_id[idx].second;
   };
 
-  if (parallelism == 1.0) t.next("sampling");
+  // if (parallelism == 1.0) t.next("sampling");
 
   // 2. count the number of light/heavy keys
   size_t LOG2_LIGHT_KEYS = std::min<size_t>(hash_bits - shift_bits, 10);
@@ -354,7 +354,7 @@ sequence<s_size_t> semisort_less_(slice<InIterator, InIterator> In, slice<OutIte
 
   if (parallelism == 1.0) t_dis.next("component of distribute: copy");
 
-  if (parallelism == 1.0) t.next("distribute");
+  // if (parallelism == 1.0) t.next("distribute");
 
   // 3. sort within each bucket
   sequence<sequence<s_size_t>> inner_offsets;
@@ -380,7 +380,7 @@ sequence<s_size_t> semisort_less_(slice<InIterator, InIterator> In, slice<OutIte
       },
       1);
 
-  if (parallelism == 1.0) t.next("local sort");
+  // if (parallelism == 1.0) t.next("local sort");
 
   sequence<s_size_t> offsets;
   if (return_offsets) {
@@ -388,7 +388,7 @@ sequence<s_size_t> semisort_less_(slice<InIterator, InIterator> In, slice<OutIte
         tabulate<s_size_t>(heavy_buckets, [&](size_t i) { return bucket_offsets[i + light_buckets]; });
     offsets = flatten(inner_offsets);
   }
-  if (parallelism == 1.0) t.next("compute offsets");
+  // if (parallelism == 1.0) t.next("compute offsets");
   return offsets;
 }
 
