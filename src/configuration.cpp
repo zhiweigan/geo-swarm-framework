@@ -2,6 +2,7 @@
 #include "geo_utils.h"
 #include <parlay/parallel.h>
 #include <parlay/primitives.h>
+#include <parlay/semisort.h>
 #include <set>
 
 void Configuration::init()
@@ -48,16 +49,31 @@ void Configuration::add_agents(std::vector<Position> &agent_pos)
   }
 }
 
+struct pos_key
+{
+  pos_key(parlay::sequence<Agent> *agents_)
+  : agents(agents_)
+  { }
+  Position operator()(const int id) const { return (*agents)[id].loc->loc; }
+  parlay::sequence<Agent> * agents;
+};
+
+struct pos_hash
+{
+  size_t operator()(const Position &p) const
+  {
+    int tmp = p.y + (p.x + 1) / 2;
+    return parlay::hash64_2(p.x + tmp * tmp);
+  }
+};
+
 void
 Configuration::transition()
 {
-  // sort agents by location TODO: semisort
   auto sort_start = std::chrono::high_resolution_clock::now();
-  auto comp = [&](int agent1, int agent2)
-  {
-    return agents[agent1].loc->loc < agents[agent2].loc->loc;
-  };
-  parlay::sort_inplace(agent_ids, comp);
+  pos_key g(&agents);
+  pos_hash h;
+  parlay::semisort_equal_inplace<int*, pos_key, pos_hash>(parlay::make_slice(agent_ids), g, h);
   auto sort_end = std::chrono::high_resolution_clock::now();
   sorting += std::chrono::duration_cast<std::chrono::nanoseconds>(sort_end - sort_start).count();
 
@@ -179,7 +195,7 @@ parlay::slice<int*, int*> Configuration::getAgentsNextToAgent(int i)
   return agent_ids.cut(counts[is_diff[i]], counts[is_diff[i]+1]);
 }
 
-void loopOverAgents(parlay::slice<int *, int *> agents, const std::function<void(int)> &f)
+void Configuration::loopOverAgents(parlay::slice<int *, int *> agents, const std::function<void(int)> &f)
 {
   parlay::parallel_for(0, agents.size(), f);
 }
