@@ -27,7 +27,7 @@ void Configuration::update_agent(int i)
 
 void Configuration::update_location(Location *loc, parlay::slice<int *, int *> agentid_slice, parlay::slice<AgentTransition *, AgentTransition *> transitions)
 {
-  for(int i = 0; i < agentid_slice.size(); i++)
+  loopOverAgents(agentid_slice, [&](int i)
   {
     if (loc->state.is_task && loc->state.residual_demand > 0)
     {
@@ -40,7 +40,7 @@ void Configuration::update_location(Location *loc, parlay::slice<int *, int *> a
     {
       transitions[i].accepted = true;
     } 
-  }
+  });
   loc->state.residual_demand -= std::min((int)agentid_slice.size(), loc->state.residual_demand);
 }
 
