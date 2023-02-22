@@ -6,16 +6,13 @@
 
 void Configuration::update_agent(int i)
 {
-  parlay::parallel_for(0, agent_ids.size(), [&](int i) 
+  auto &transition = agent_transitions[i];
+  if (transition.accepted)
   {
-    auto &transition = agent_transitions[i];
-    transition.astate.count += counts[is_diff[i]+1] - counts[is_diff[i]] - 1;
-    transition.astate.rounds += 1;
     agents[agent_ids[i]].state = transition.astate;
     Position pos = get_coords_from_movement(agents[agent_ids[i]].loc->loc, transition.dir);
-    agents[agent_ids[i]].loc = map.get_vertex(pos.x, pos.y); 
-    transition.accepted = true;
-  });
+    agents[agent_ids[i]].loc = map.get_vertex(pos.x, pos.y);
+  }
 }
 
 Configuration::~Configuration() 
@@ -24,10 +21,14 @@ Configuration::~Configuration()
 void Configuration::custom_setup()
 { }
 
-void Configuration::update_location(Location *loc, parlay::slice<int *, int *> agents)
-{ 
-  // accept every transition
-  // loop over agents, and accept every transition
+void Configuration::update_location(Location *loc, parlay::slice<int *, int *> agentid_slice, parlay::slice<AgentTransition *, AgentTransition *> transitions)
+{
+  loopOverAgents(agentid_slice, [&](int i)
+  {
+    transitions[i].accepted = true;
+    transitions[i].astate.count += agentid_slice.size() - 1;
+    transitions[i].astate.rounds += 1;
+  });
 }
 
 bool Configuration::is_finished()

@@ -17,6 +17,7 @@ public:
   : loc(&loc_)
   , state(AgentState(id_))
   , rgen(std::chrono::system_clock::now().time_since_epoch().count())
+  , active(true)
   { }
 
   AgentTransition generate_transition(LocalMapping &local_mapping)
@@ -29,6 +30,7 @@ public:
   Location *loc;
   AgentState state;
   parlay::random_generator rgen;
+  bool active;
 };
 
 using Agent = AgentTemplate<DensityLocationState, DensityAgentState>;
