@@ -11,7 +11,7 @@ main()
 {
   // TODO: optimize setup
   // constants
-  bool verbose = false;
+  bool verbose = VERBOSE;
   int n = HEIGHT, m = WIDTH;
   int num_agents = NUM_AGENTS;
   int num_tasks = NUM_TASKS;
@@ -60,12 +60,12 @@ main()
     config.transition();
     iter++;
 
-    if (MAX_ITERS > 0 && iter >= MAX_ITERS)
-      break;
-    if (verbose && iter % 100 == 0) {
+    if (verbose) {
       std::cout << "Iteration: " << iter <<std::endl;
       config.print_config();
     }
+    if (MAX_ITERS > 0 && iter >= MAX_ITERS)
+      break;
   }
 
   auto t2 = std::chrono::high_resolution_clock::now();

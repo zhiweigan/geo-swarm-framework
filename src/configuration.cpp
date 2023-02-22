@@ -76,7 +76,6 @@ Configuration::transition()
   parlay::semisort_equal_inplace<int*, pos_key, pos_hash>(parlay::make_slice(agent_ids), g, h);
   auto sort_end = std::chrono::high_resolution_clock::now();
   sorting += std::chrono::duration_cast<std::chrono::nanoseconds>(sort_end - sort_start).count();
-
   auto parallel_start = std::chrono::high_resolution_clock::now();
   parlay::parallel_for(0, agents.size(), [&](size_t i)
   {
@@ -139,7 +138,7 @@ Configuration::transition()
 
   // generate transitions for each agent
   auto transition_start = std::chrono::high_resolution_clock::now();
-  parlay::parallel_for(0, agent_ids.size() - 1, [&](int i)
+  parlay::parallel_for(0, agent_ids.size(), [&](int i)
   {
     agent_transitions[i] = agents[agent_ids[i]].generate_transition(local_mappings[agents[agent_ids[i]].loc->loc]);
   });
@@ -150,7 +149,7 @@ Configuration::transition()
   auto update_start = std::chrono::high_resolution_clock::now();
   parlay::parallel_for(0, num_unique_locations, [&](int i)
   {
-    update_location(unique_vertices[i], getAgentsAtUniqueLocation(i));
+    update_location(unique_vertices[i], getAgentsAtUniqueLocation(i), getAgentTransitionsAtUniqueLocation(i));
   });
   parlay::parallel_for(0, agent_ids.size(), [&](int i)
   { 
@@ -188,6 +187,11 @@ Location *Configuration::get_vertex(int x, int y)
 parlay::slice<int*, int*> Configuration::getAgentsAtUniqueLocation(int i)
 {
   return agent_ids.cut(counts[i], counts[i+1]);
+}
+
+parlay::slice<AgentTransition *, AgentTransition *> Configuration::getAgentTransitionsAtUniqueLocation(int i)
+{
+  return agent_transitions.cut(counts[i], counts[i + 1]);
 }
 
 parlay::slice<int*, int*> Configuration::getAgentsNextToAgent(int i)

@@ -13,7 +13,7 @@ void Configuration::custom_setup()
 void Configuration::update_agent(int i)
 {
   auto &transition = agent_transitions[i];
-  if (agent_transitions[i].accepted)
+  if (transition.accepted)
   {
     agents[agent_ids[i]].state = transition.astate;
     Position pos = get_coords_from_movement(agents[agent_ids[i]].loc->loc, transition.dir);
@@ -25,14 +25,23 @@ void Configuration::update_agent(int i)
   }
 }
 
-void Configuration::update_location(Location *loc, parlay::slice<int *, int *> agents)
+void Configuration::update_location(Location *loc, parlay::slice<int *, int *> agentid_slice, parlay::slice<AgentTransition *, AgentTransition *> transitions)
 {
-  loopOverAgents(agents, [&](int i) {
-    if (i < loc->state.residual_demand)
+  for(int i = 0; i < agentid_slice.size(); i++)
+  {
+    if (loc->state.is_task && loc->state.residual_demand > 0)
     {
-      agent_transitions[i].accepted = true;
+      if (i < loc->state.residual_demand)
+      {
+        transitions[i].accepted = true;
+      }
     }
-  });
+    else
+    {
+      transitions[i].accepted = true;
+    } 
+  }
+  loc->state.residual_demand -= std::min((int)agentid_slice.size(), loc->state.residual_demand);
 }
 
 void Configuration::set_task_vertex(Position & pos)

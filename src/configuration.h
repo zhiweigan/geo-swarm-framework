@@ -29,14 +29,15 @@ public:
 
   // ------------- HELPERS -------------
 
-  parlay::slice<int*, int*> getAgentsAtUniqueLocation(int i);
-  parlay::slice<int*, int*> getAgentsNextToAgent(int i);
+  parlay::slice<int *, int *> getAgentsAtUniqueLocation(int i);
+  parlay::slice<AgentTransition *, AgentTransition *> getAgentTransitionsAtUniqueLocation(int i);
+  parlay::slice<int *, int *> getAgentsNextToAgent(int i);
   void loopOverAgents(parlay::slice<int *, int *> agents, const std::function<void(int)> &f);
 
   // -----------------------------------
 
   void update_agent(int i);
-  void update_location(Location *loc, parlay::slice<int *, int *> agents);
+  void update_location(Location *loc, parlay::slice<int *, int *> agents, parlay::slice<AgentTransition *, AgentTransition *> transitions);
   bool is_finished();
   void print_config(int time = 0, int flags = 0);
 
