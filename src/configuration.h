@@ -9,18 +9,19 @@
 
 class Configuration {
 public:
-  Configuration(int n_, int m_, int inf_ = 2)
+  Configuration(int n_, int m_, int o_, int inf_ = 2)
   : n(n_)
   , m(m_)
+  , o(o_)
   , influence_radius(inf_)
-  , map(n_, m_) 
+  , map(n_, m_, o_) 
   { }
   ~Configuration();
 
   void init();
   void add_agents(std::vector<Position> &agent_pos);
   void transition();
-  Location *get_vertex(int x, int y);
+  Location *get_vertex(int x, int y, int z);
   void parallel_setup();
 
   struct UserDefined;
@@ -49,6 +50,7 @@ public:
 
   int n;
   int m;
+  int o;
   int rounds = 0;
   BasicMap map;
 

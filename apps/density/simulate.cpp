@@ -11,15 +11,15 @@ main()
 {
   // constants
   bool verbose = false;
-  int n = HEIGHT, m = WIDTH;
+  int n = HEIGHT, m = WIDTH, o = DEPTH;
   int num_agents = NUM_AGENTS;
 
-  Configuration config(n, m);
+  Configuration config(n, m, o);
   config.init();
 
   std::vector<Position> agent_pos;
   for (int i = 0; i < num_agents; i++) {
-    agent_pos.emplace_back(rand() % n, rand() % m);
+    agent_pos.emplace_back(rand() % n, rand() % m, rand() % o);
   }
   config.add_agents(agent_pos);
   config.parallel_setup();

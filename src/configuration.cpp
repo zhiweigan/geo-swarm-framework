@@ -11,8 +11,11 @@ void Configuration::init()
   {
     for (int16_t y = 0; y < WIDTH; y++)
     {
-      LocalMapping local_mapping = generate_local_mapping(*map.get_vertex(x, y), influence_radius, map);
-      local_mappings.insert_or_assign(Position{x, y}, local_mapping);
+      for (int16_t z = 0; z < DEPTH; z++)
+      {
+        LocalMapping local_mapping = generate_local_mapping(*map.get_vertex(x, y, z), influence_radius, map);
+        local_mappings.insert_or_assign(Position{x, y, z}, local_mapping);
+      }
     }
   }
   custom_setup();
@@ -42,7 +45,7 @@ void Configuration::add_agents(std::vector<Position> &agent_pos)
   int id = 0;
   for (Position pos : agent_pos)
   {
-    Agent agent(id++, *map.get_vertex(pos.x, pos.y));
+    Agent agent(id++, *map.get_vertex(pos.x, pos.y, pos.z));
     agents.push_back(agent);
     agent_transitions.push_back(AgentTransition({pos}, {id-1}));
     agent_messages.push_back(AgentMessage{});
@@ -62,8 +65,8 @@ struct pos_hash
 {
   size_t operator()(const Position &p) const
   {
-    int tmp = p.y + (p.x + 1) / 2;
-    return parlay::hash64_2(p.x + tmp * tmp);
+    int tmp = p.x * HEIGHT * DEPTH + p.y * DEPTH + p.z;
+    return parlay::hash64_2(tmp);
   }
 };
 
@@ -168,7 +171,7 @@ Configuration::transition()
   parlay::parallel_for(0, num_unique_locations, [&](int i)
   {
     Position loc = unique_vertices[i]->loc;
-    map.get_messages(loc.x, loc.y)->resize(0);
+    map.get_messages(loc.x, loc.y, loc.z)->resize(0);
   });
 
   rounds += 1;
@@ -179,9 +182,9 @@ parlay::sequence<Position> *Configuration::get_tasks()
   return &task_vertices;
 }
 
-Location *Configuration::get_vertex(int x, int y)
+Location *Configuration::get_vertex(int x, int y, int z)
 {
-  return map.get_vertex(x, y);
+  return map.get_vertex(x, y, z);
 }
 
 parlay::slice<int*, int*> Configuration::getAgentsAtUniqueLocation(int i)

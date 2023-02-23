@@ -16,14 +16,19 @@ inline std::map<Position, std::pair<Location *, std::vector<AgentMessage>*>> gen
   std::map<Position, std::pair<Location *, std::vector<AgentMessage> *>> ret_map;
   int vx = vtx.loc.x;
   int vy = vtx.loc.y;
+  int vz = vtx.loc.z;
 
   for (int16_t dx = -influence_radius; dx <= influence_radius; dx++)
   {
     for (int16_t dy = -influence_radius; dy <= influence_radius; dy++)
     {
-      int nvx = ((vx + dx) % HEIGHT + HEIGHT) % HEIGHT;
-      int nvy = ((vy + dy) % WIDTH + WIDTH) % WIDTH;
-      ret_map.insert(std::make_pair(Position{dx, dy}, std::make_pair(map.get_vertex(nvx, nvy), map.get_messages(nvx, nvy))));
+      for (int16_t dz = -influence_radius; dz <= influence_radius; dz++)
+      {
+        int nvx = ((vx + dx) % HEIGHT + HEIGHT) % HEIGHT;
+        int nvy = ((vy + dy) % WIDTH + WIDTH) % WIDTH;
+        int nvz = ((vz + dz) % DEPTH + DEPTH) % DEPTH;
+        ret_map.insert(std::make_pair(Position{dx, dy, dz}, std::make_pair(map.get_vertex(nvx, nvy, nvz), map.get_messages(nvx, nvy, nvz))));
+      }
     }
   }
   return ret_map;
@@ -50,6 +55,12 @@ inline Position get_coords_from_movement(Position pos, Direction dir, bool ignor
       return pos;
     case Direction::U:
       pos.y = mod(pos.y + 1, WIDTH);
+      return pos;
+    case Direction::I:
+      pos.y = mod(pos.z - 1, DEPTH);
+      return pos;
+    case Direction::O:
+      pos.y = mod(pos.z + 1, DEPTH);
       return pos;
     case Direction::LAST:
       return pos;
