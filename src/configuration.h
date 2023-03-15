@@ -18,7 +18,7 @@ public:
   void init();
   void transition();
   void parallel_setup();
-  void add_agent(Agent agent);
+  void add_agent(Agent &agent);
 
   struct UserDefined;
   UserDefined* custom = 0;

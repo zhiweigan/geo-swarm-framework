@@ -29,14 +29,14 @@ void Configuration<Map>::init()
 template<class Map>
 void Configuration<Map>::parallel_setup()
 {
-  for (Agent agent : agents)
+  for (Agent &agent : agents)
   {
     loc_diff.push_back(false);
     is_diff.push_back(0);
     offsets.push_back(0);
     unique_vertices.push_back(0);
     counts.push_back(0);
-    agent_ids.push_back(agent.state.id);
+    agent_ids.push_back(agent.state->id);
     removed_agent_ids.push_back(-1);
     filter_space.push_back(0);
   }
@@ -47,10 +47,10 @@ void Configuration<Map>::parallel_setup()
 }
 
 template<class Map>
-void Configuration<Map>::add_agent(Agent agent) 
+void Configuration<Map>::add_agent(Agent &agent) 
 {
   agents.push_back(agent);
-  agent_transitions.push_back(AgentTransition({agent.loc->loc}, {agent.state.id}));
+  agent_transitions.push_back(AgentTransition({agent.loc->loc}, {agent.state->id}));
   agent_messages.push_back(AgentMessage{});
 }
 

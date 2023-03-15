@@ -18,7 +18,7 @@ void Torus2D::add_message(int x, int y, AgentMessage &&message)
 
 std::vector<AgentMessage> *Torus2D::get_messages(Position pos)
 {
-  return &messages[pos.x * m + pos.z];
+  return &messages[pos.x * m + pos.y];
 }
 
 #else 
