@@ -82,10 +82,10 @@ inline Position get_coords_from_movement(Position pos, Direction dir, bool ignor
 
 #ifdef DIM3
     case Direction::I:
-      pos.y = mod(pos.z - 1, DEPTH);
+      pos.z = mod(pos.z - 1, DEPTH);
       return pos;
     case Direction::O:
-      pos.y = mod(pos.z + 1, DEPTH);
+      pos.z = mod(pos.z + 1, DEPTH);
       return pos;
 #endif
 
