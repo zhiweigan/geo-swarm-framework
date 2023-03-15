@@ -22,11 +22,13 @@ struct DensityAgentState
   : id(id_)
   , count(0)
   , rounds(0)
+  , rnum(0)
   { }
 
   int id;
   int count = 0;
   int rounds = 0;
+  int rnum = 0;
 };
 
 struct DensityAgentMessage

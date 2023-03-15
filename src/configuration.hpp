@@ -1,11 +1,11 @@
-#include "configuration.h"
 #include "geo_utils.h"
 #include <parlay/parallel.h>
 #include <parlay/primitives.h>
 #include <parlay/semisort.h>
 #include <set>
 
-void Configuration::init()
+template<class Map>
+void Configuration<Map>::init()
 {
   for (int16_t x = 0; x < HEIGHT; x++)
   {
@@ -18,7 +18,8 @@ void Configuration::init()
   custom_setup();
 }
 
-void Configuration::parallel_setup()
+template<class Map>
+void Configuration<Map>::parallel_setup()
 {
   for (Agent agent : agents)
   {
@@ -37,16 +38,12 @@ void Configuration::parallel_setup()
   filter_space.push_back(0);
 }
 
-void Configuration::add_agents(std::vector<Position> &agent_pos) 
+template<class Map>
+void Configuration<Map>::add_agent(Agent agent) 
 {
-  int id = 0;
-  for (Position pos : agent_pos)
-  {
-    Agent agent(id++, *map.get_vertex(pos.x, pos.y));
-    agents.push_back(agent);
-    agent_transitions.push_back(AgentTransition({pos}, {id-1}));
-    agent_messages.push_back(AgentMessage{});
-  }
+  agents.push_back(agent);
+  agent_transitions.push_back(AgentTransition({agent.loc->loc}, {agent.state.id}));
+  agent_messages.push_back(AgentMessage{});
 }
 
 struct pos_key
@@ -67,8 +64,9 @@ struct pos_hash
   }
 };
 
+template<class Map>
 void
-Configuration::transition()
+Configuration<Map>::transition()
 {
   auto sort_start = std::chrono::high_resolution_clock::now();
   pos_key g(&agents);
@@ -174,32 +172,26 @@ Configuration::transition()
   rounds += 1;
 }
 
-parlay::sequence<Position> *Configuration::get_tasks()
-{
-  return &task_vertices;
-}
-
-Location *Configuration::get_vertex(int x, int y)
-{
-  return map.get_vertex(x, y);
-}
-
-parlay::slice<int*, int*> Configuration::getAgentsAtUniqueLocation(int i)
+template<class Map>
+parlay::slice<int*, int*> Configuration<Map>::getAgentsAtUniqueLocation(int i)
 {
   return agent_ids.cut(counts[i], counts[i+1]);
 }
 
-parlay::slice<AgentTransition *, AgentTransition *> Configuration::getAgentTransitionsAtUniqueLocation(int i)
+template<class Map>
+parlay::slice<AgentTransition *, AgentTransition *> Configuration<Map>::getAgentTransitionsAtUniqueLocation(int i)
 {
   return agent_transitions.cut(counts[i], counts[i + 1]);
 }
 
-parlay::slice<int*, int*> Configuration::getAgentsNextToAgent(int i)
+template<class Map>
+parlay::slice<int*, int*> Configuration<Map>::getAgentsNextToAgent(int i)
 {
   return agent_ids.cut(counts[is_diff[i]], counts[is_diff[i]+1]);
 }
 
-void Configuration::loopOverAgents(parlay::slice<int *, int *> agents, const std::function<void(int)> &f)
+template<class Map>
+void Configuration<Map>::loopOverAgents(parlay::slice<int *, int *> agents, const std::function<void(int)> &f)
 {
   parlay::parallel_for(0, agents.size(), f);
 }

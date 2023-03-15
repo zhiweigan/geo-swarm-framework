@@ -6,22 +6,19 @@
 #include <parlay/sequence.h>
 #include <chrono>
 
-
+template<class Map>
 class Configuration {
 public:
-  Configuration(int n_, int m_, int inf_ = 2)
-  : n(n_)
-  , m(m_)
-  , influence_radius(inf_)
-  , map(n_, m_) 
+  Configuration(Map map_, int inf_ = 2)
+  : influence_radius(inf_)
+  , map(map_) 
   { }
   ~Configuration();
 
   void init();
-  void add_agents(std::vector<Position> &agent_pos);
   void transition();
-  Location *get_vertex(int x, int y);
   void parallel_setup();
+  void add_agent(Agent agent);
 
   struct UserDefined;
   UserDefined* custom = 0;
@@ -41,16 +38,8 @@ public:
   bool is_finished();
   void print_config(int time = 0, int flags = 0);
 
-  // TODO: REMOVE
-  void set_task_vertex(Position &pos);
-  Location *get_task(int i);
-  parlay::sequence<Position> *get_tasks();
-  size_t num_unique_locations;
-
-  int n;
-  int m;
   int rounds = 0;
-  BasicMap map;
+  Map map;
 
   // benchmarking
   uint64_t sorting = 0;
@@ -79,7 +68,11 @@ private:
   parlay::sequence<int> filter_space;
   parlay::sequence<int> counts;
   parlay::sequence<Location*> unique_vertices;
+  size_t num_unique_locations;
 
   parlay::sequence<int> agent_ids;
   parlay::sequence<int> removed_agent_ids;
 };
+
+#include <configuration.hpp>
+#include <appconfig.hpp>

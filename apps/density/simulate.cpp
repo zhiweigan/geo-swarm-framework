@@ -13,15 +13,18 @@ main()
   bool verbose = false;
   int n = HEIGHT, m = WIDTH;
   int num_agents = NUM_AGENTS;
+  int percentage = 100;
 
-  Configuration config(n, m);
+  BasicMap map(n, m);
+  Configuration<BasicMap> config(map);
   config.init();
-
-  std::vector<Position> agent_pos;
-  for (int i = 0; i < num_agents; i++) {
-    agent_pos.emplace_back(rand() % n, rand() % m);
+  
+  for (int i = 0; i < num_agents; i++)
+  {
+    Agent agent(i, *map.get_vertex(rand() % n, rand() % m));
+    config.add_agent(agent);
   }
-  config.add_agents(agent_pos);
+
   config.parallel_setup();
 
   int iter = 0;
