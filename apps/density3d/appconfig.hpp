@@ -31,7 +31,7 @@ void Configuration<Map>::update_location(Location *loc, parlay::slice<int *, int
     transitions[i].accepted = true;
     for(int j = 0; j < agentid_slice.size(); j++)
     {
-      if (j != i && agents[agentid_slice[i]].rgen() % 100 < agents[agentid_slice[i]].percentage)
+      if (j != i)
         transitions[i].astate.count++;
     }
     transitions[i].astate.rounds += 1;
@@ -41,7 +41,7 @@ void Configuration<Map>::update_location(Location *loc, parlay::slice<int *, int
 template<class Map>
 bool Configuration<Map>::is_finished()
 {
-  return rounds >= HEIGHT / 2;
+  return rounds >= HEIGHT * WIDTH / 2;
 }
 
 template<class Map>

@@ -24,14 +24,7 @@ public:
   AgentTransition generate_transition(LocalMapping &local_mapping)
   {
     AgentState new_astate = state;
-    int rand = rgen() % 10;
-    Direction new_dir;
-    // only right and up
-    if (rand < 0) new_dir = static_cast<Direction>(1);
-    // else if (rand < 5) new_dir = static_cast<Direction>(2);
-    // else if (rand < 5) new_dir = static_cast<Direction>(3);
-    else new_dir = static_cast<Direction>(4); 
-    new_astate.rnum = rgen();
+    Direction new_dir = static_cast<Direction>((rgen() % 6) + 1);
     return AgentTransition(loc->state, std::move(new_astate), new_dir);
   }
 
