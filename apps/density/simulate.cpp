@@ -11,17 +11,17 @@ main()
 {
   // constants
   bool verbose = false;
-  int n = HEIGHT, m = WIDTH;
+  int n = HEIGHT, m = WIDTH, o = DEPTH;
   int num_agents = NUM_AGENTS;
   int percentage = 100;
 
-  BasicMap map(n, m);
-  Configuration<BasicMap> config(map);
+  Torus3D map(n, m, o);
+  Configuration<Torus3D> config(map);
   config.init();
   
   for (int i = 0; i < num_agents; i++)
   {
-    Agent agent(i, *map.get_vertex(rand() % n, rand() % m));
+    Agent agent(i, *map.get_vertex(rand() % n, rand() % m, rand() % o));
     config.add_agent(agent);
   }
 

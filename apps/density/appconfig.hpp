@@ -11,7 +11,7 @@ void Configuration<Map>::update_agent(int i)
   {
     agents[agent_ids[i]].state = transition.astate;
     Position pos = get_coords_from_movement(agents[agent_ids[i]].loc->loc, transition.dir);
-    agents[agent_ids[i]].loc = map.get_vertex(pos.x, pos.y);
+    agents[agent_ids[i]].loc = map.get_vertex(pos.x, pos.y, pos.z);
   }
 }
 

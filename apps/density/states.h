@@ -4,7 +4,7 @@
 #include <iostream>
 #include <set>
 #include <map>
-#include "../template_states.h"
+#include "../template_states_3d.h"
 
 struct DensityLocationState
 {

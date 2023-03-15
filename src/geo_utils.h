@@ -8,10 +8,11 @@
 #include <states.h>
 #include <constants.h>
 
+#ifndef DIM3
 inline std::map<Position, std::pair<Location *, std::vector<AgentMessage>*>> generate_local_mapping(
   Location &vtx, 
   int influence_radius, 
-  BasicMap &map)
+  Torus2D &map)
 {
   std::map<Position, std::pair<Location *, std::vector<AgentMessage> *>> ret_map;
   int vx = vtx.loc.x;
@@ -21,13 +22,40 @@ inline std::map<Position, std::pair<Location *, std::vector<AgentMessage>*>> gen
   {
     for (int16_t dy = -influence_radius; dy <= influence_radius; dy++)
     {
-      int nvx = ((vx + dx) % HEIGHT + HEIGHT) % HEIGHT;
-      int nvy = ((vy + dy) % WIDTH + WIDTH) % WIDTH;
-      ret_map.insert(std::make_pair(Position{dx, dy}, std::make_pair(map.get_vertex(nvx, nvy), map.get_messages(nvx, nvy))));
+      int16_t nvx = ((vx + dx) % HEIGHT + HEIGHT) % HEIGHT;
+      int16_t nvy = ((vy + dy) % WIDTH + WIDTH) % WIDTH;
+      ret_map.insert(std::make_pair(Position{dx, dy}, std::make_pair(map.get_vertex(nvx, nvy), map.get_messages(Position{nvx, nvy}))));
     }
   }
   return ret_map;
 }
+#else
+inline std::map<Position, std::pair<Location *, std::vector<AgentMessage>*>> generate_local_mapping(
+  Location &vtx, 
+  int influence_radius, 
+  Torus3D &map)
+{
+  std::map<Position, std::pair<Location *, std::vector<AgentMessage> *>> ret_map;
+  int vx = vtx.loc.x;
+  int vy = vtx.loc.y;
+  int vz = vtx.loc.z;
+
+  for (int16_t dx = -influence_radius; dx <= influence_radius; dx++)
+  {
+    for (int16_t dy = -influence_radius; dy <= influence_radius; dy++)
+    {
+      for (int16_t dz = -influence_radius; dz <= influence_radius; dz++)
+      {
+        int16_t nvx = ((vx + dx) % HEIGHT + HEIGHT) % HEIGHT;
+        int16_t nvy = ((vy + dy) % WIDTH + WIDTH) % WIDTH;
+        int16_t nvz = ((vz + dz) % DEPTH + DEPTH) % DEPTH;
+        ret_map.insert(std::make_pair(Position{dx, dy, dz}, std::make_pair(map.get_vertex(nvx, nvy, nvz), map.get_messages(Position{nvx, nvy, nvz}))));
+      }
+    }
+  }
+  return ret_map;
+}
+#endif
 
 inline int mod(int a, int b)
 {
@@ -51,6 +79,16 @@ inline Position get_coords_from_movement(Position pos, Direction dir, bool ignor
     case Direction::U:
       pos.y = mod(pos.y + 1, WIDTH);
       return pos;
+
+#ifdef DIM3
+    case Direction::I:
+      pos.y = mod(pos.z - 1, DEPTH);
+      return pos;
+    case Direction::O:
+      pos.y = mod(pos.z + 1, DEPTH);
+      return pos;
+#endif
+
     case Direction::LAST:
       return pos;
   } 

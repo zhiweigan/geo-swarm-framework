@@ -11,8 +11,16 @@ void Configuration<Map>::init()
   {
     for (int16_t y = 0; y < WIDTH; y++)
     {
+#ifdef DIM3
+      for (int16_t z = 0; z < DEPTH; z++)
+      {
+        LocalMapping local_mapping = generate_local_mapping(*map.get_vertex(x, y, z), influence_radius, map);
+        local_mappings.insert_or_assign(Position{x, y, z}, local_mapping);
+      }
+#else
       LocalMapping local_mapping = generate_local_mapping(*map.get_vertex(x, y), influence_radius, map);
       local_mappings.insert_or_assign(Position{x, y}, local_mapping);
+#endif
     }
   }
   custom_setup();
@@ -59,8 +67,13 @@ struct pos_hash
 {
   size_t operator()(const Position &p) const
   {
+#ifdef DIM3
+    int tmp = p.x * HEIGHT * DEPTH + p.y * DEPTH + p.z;
+    return parlay::hash64_2(tmp);
+#else
     int tmp = p.y + (p.x + 1) / 2;
     return parlay::hash64_2(p.x + tmp * tmp);
+#endif
   }
 };
 
@@ -166,7 +179,7 @@ Configuration<Map>::transition()
   parlay::parallel_for(0, num_unique_locations, [&](int i)
   {
     Position loc = unique_vertices[i]->loc;
-    map.get_messages(loc.x, loc.y)->resize(0);
+    map.get_messages(loc)->resize(0);
   });
 
   rounds += 1;
