@@ -3,15 +3,14 @@ import os
 import json
 
 lines_to_map = {
-  1: 'checking',
-  2: 'sorting',
-  3: 'generating',
-  4: 'updating',
-  5: 'iterations',
-  6: 'total'
+  1: 'sorting',
+  2: 'generating',
+  3: 'updating',
+  4: 'iterations',
+  5: 'total'
 }
 
-cores_to_try = [1,2,4,8,16]
+cores_to_try = [1,2,4,8,16,24]
 tries = 5
 results = {}
 os.chdir("../../build")
@@ -24,7 +23,6 @@ for cores in cores_to_try:
   total = 0
 
   ret_map = {
-    'checking': 0,
     'sorting': 0,
     'generating': 0,
     'updating': 0,

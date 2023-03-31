@@ -29,7 +29,6 @@ main()
 
   int iter = 0;
   std::cout<<"Starting simulation"<<std::endl;
-  auto t1 = std::chrono::high_resolution_clock::now();
 
   while (!config.is_finished()) {
     config.transition();
@@ -42,29 +41,7 @@ main()
     }
   }
 
-  auto t2 = std::chrono::high_resolution_clock::now();
   config.print_config();
-
-  std::cout << "sorting took "
-            << config.sorting / 1e6
-            << " milliseconds\n";
-
-  std::cout << "generating transitions took "
-            << config.transitions / 1e6
-            << " milliseconds\n";
-
-  std::cout << "updating took "
-            << config.update / 1e6
-            << " milliseconds\n";
-
-  std::cout << "simulation completed in "
-            << iter
-            << " iterations\n";
-
-  std::cout << "simulation took "
-            << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count()
-            << " milliseconds\n";
-
 
   return 0;
 }

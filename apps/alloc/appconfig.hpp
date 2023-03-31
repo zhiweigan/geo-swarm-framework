@@ -1,16 +1,18 @@
-#include <configuration.h>
 #include <geo_utils.h>
 #include <parlay/parallel.h>
 #include <parlay/primitives.h>
 #include <set>
 
 // must be defined here so the type is complete
-Configuration::~Configuration() { }
+template<class Map>
+Configuration<Map>::~Configuration() { }
 
-void Configuration::custom_setup()
+template<class Map>
+void Configuration<Map>::custom_setup()
 { }
 
-void Configuration::update_agent(int i)
+template<class Map>
+void Configuration<Map>::update_agent(int i)
 {
   auto &transition = agent_transitions[i];
   if (transition.accepted)
@@ -25,7 +27,8 @@ void Configuration::update_agent(int i)
   }
 }
 
-void Configuration::update_location(Location *loc, parlay::slice<int *, int *> agentid_slice, parlay::slice<AgentTransition *, AgentTransition *> transitions)
+template<class Map>
+void Configuration<Map>::update_location(Location *loc, parlay::slice<int *, int *> agentid_slice, parlay::slice<AgentTransition *, AgentTransition *> transitions)
 {
   loopOverAgents(agentid_slice, [&](int i)
   {
@@ -44,12 +47,14 @@ void Configuration::update_location(Location *loc, parlay::slice<int *, int *> a
   loc->state.residual_demand -= std::min((int)agentid_slice.size(), loc->state.residual_demand);
 }
 
-void Configuration::set_task_vertex(Position & pos)
+template<class Map>
+void Configuration<Map>::set_task_vertex(Position & pos)
 {
   task_vertices.emplace_back(pos.x, pos.y);
 }
 
-bool Configuration::is_finished()
+template<class Map>
+bool Configuration<Map>::is_finished()
 {
   int total_rd = parlay::reduce(parlay::delayed_map(*get_tasks(), [&](Position task_vertex)
   { 
@@ -58,12 +63,14 @@ bool Configuration::is_finished()
   return total_rd == 0;
 }
 
-Location *Configuration::get_task(int i)
+template<class Map>
+Location *Configuration<Map>::get_task(int i)
 {
   return map.get_vertex(task_vertices[i].x, task_vertices[i].y);
 }
 
-void Configuration::print_config(int time, int flags)
+template<class Map>
+void Configuration<Map>::print_config(int time, int flags)
 {
   std::cout << "map @ time" << time << std::endl;
   std::vector<std::string> output;
