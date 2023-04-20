@@ -67,16 +67,16 @@ inline Position get_coords_from_movement(Position pos, Direction dir, bool ignor
   switch(dir) {
     case Direction::S:
       return pos;
-    case Direction::L:
+    case Direction::U:
       pos.x = mod(pos.x - 1, HEIGHT);
       return pos;
-    case Direction::R:
+    case Direction::D:
       pos.x = mod(pos.x + 1, HEIGHT);
       return pos;
-    case Direction::D:
+    case Direction::L:
       pos.y = mod(pos.y - 1, WIDTH);
       return pos;
-    case Direction::U:
+    case Direction::R:
       pos.y = mod(pos.y + 1, WIDTH);
       return pos;
 
@@ -86,6 +86,40 @@ inline Position get_coords_from_movement(Position pos, Direction dir, bool ignor
       return pos;
     case Direction::O:
       pos.z = mod(pos.z + 1, DEPTH);
+      return pos;
+#endif
+
+    case Direction::LAST:
+      return pos;
+  } 
+  return pos;
+}
+
+inline Position get_delta_from_movement(Direction dir)
+{
+  Position pos = {0,0};
+  switch(dir) {
+    case Direction::S:
+      return pos;
+    case Direction::U:
+      pos.x = -1;
+      return pos;
+    case Direction::D:
+      pos.x = +1;
+      return pos;
+    case Direction::L:
+      pos.y = -1;
+      return pos;
+    case Direction::R:
+      pos.y = +1;
+      return pos;
+
+#ifdef DIM3
+    case Direction::I:
+      pos.z = -1;
+      return pos;
+    case Direction::O:
+      pos.z = +1;
       return pos;
 #endif
 
@@ -123,12 +157,12 @@ inline Direction get_direction_from_angle(double angle, Position start, Position
   
   if ((x_closeness < y_closeness || (x_closeness == y_closeness && rand() % 2 == 0)) && xdir != 0) 
   {
-    if (xdir > 0) return Direction::R;
-    else return Direction::L;
+    if (xdir > 0) return Direction::L;
+    else return Direction::R;
   }
   else
   {
-    if (ydir > 0) return Direction::U;
+    if (ydir > 0) return Direction::D;
     else return Direction::U;
   }
 }

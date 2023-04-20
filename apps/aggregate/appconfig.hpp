@@ -1,5 +1,6 @@
 #include <geo_utils.h>
 #include <parlay/parallel.h>
+#include "colorprint.h"
 #include <parlay/primitives.h>
 #include <set>
 
@@ -34,27 +35,58 @@ void Configuration<Map>::update_location(Location *loc, parlay::slice<int *, int
       if (j != i)
         transitions[i].astate.count++;
     }
-    transitions[i].astate.rounds += 1;
   });
 }
 
 template<class Map>
 bool Configuration<Map>::is_finished()
 {
-  return rounds >= HEIGHT / 2;
+  return rounds >= MAX_ITERS;
 }
 
 template<class Map>
 void Configuration<Map>::print_config(int time, int flags)
 {
-  double density_estim = 0;
-  int i = 0;
-  for (auto agent : agents)
+  Color::Modifier red(Color::FG_RED);
+  Color::Modifier blue(Color::FG_BLUE);
+  Color::Modifier yellow(Color::FG_YELLOW);
+  Color::Modifier def(Color::FG_DEFAULT);
+
+  for(int i = 0; i < HEIGHT; i++)
   {
-    double estim = (double)agent.state.count / (double)agent.state.rounds;
-    density_estim += estim;
-    std::cout<<"Agent "<<i<<": "<<estim<<std::endl;
-    i++;
+    for(int j = 0; j < WIDTH; j++)
+    {
+      map.get_vertex(i,j)->state.count = 0;
+    }
   }
-  std::cout << "Mean Density Estimation: " << density_estim / agents.size() << std::endl;
+
+  double on_heat = 0;
+  double not_on_heat = 0;
+
+  for(int i = 0; i < num_unique_locations; i++)
+  {
+    unique_vertices[i]->state.count = getAgentsAtUniqueLocation(i).size();
+    if (unique_vertices[i]->state.heat > 0)
+    {
+      on_heat += unique_vertices[i]->state.count;
+    } else
+    {
+      not_on_heat += unique_vertices[i]->state.count;
+    }
+  }
+
+  for(int i = 0; i < HEIGHT; i++)
+  {
+    for(int j = 0; j < WIDTH; j++)
+    {
+      if (map.get_vertex(i,j)->state.heat == 0) std::cout<<blue;
+      else if (map.get_vertex(i,j)->state.heat > 0 && map.get_vertex(i,j)->state.heat < 0.4)  std::cout<<yellow;
+      else std::cout<<red;
+      std::cout<<std::min(map.get_vertex(i,j)->state.count, 9)<<def;
+    }
+    std::cout<<std::endl;
+  }
+
+  std::cout<<"Percent on heat: "<<on_heat / (on_heat + not_on_heat)<<std::endl;
+  std::cout<<"Number on heat: "<<on_heat<<std::endl;
 }
