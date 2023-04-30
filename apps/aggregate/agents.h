@@ -74,10 +74,13 @@ public:
         new_astate.angle = -1;
         new_astate.wait_left = waitfn(heat);
 
-        if (local_mapping[{0,1}].second->size() > 0 && local_mapping[{0,1}].first->state.heat > heat) new_dir = Direction::R;
-        if (local_mapping[{0,-1}].second->size() > 0 && local_mapping[{0,-1}].first->state.heat > heat) new_dir = Direction::L;
-        if (local_mapping[{1,0}].second->size() > 0 && local_mapping[{1,0}].first->state.heat > heat) new_dir = Direction::D;
-        if (local_mapping[{-1,0}].second->size() > 0 && local_mapping[{-1,0}].first->state.heat > heat) new_dir = Direction::U;
+        // if (heat > 0.05) 
+        // {
+        //   if (local_mapping[{0,1}].second->size() > 0 && local_mapping[{0,1}].first->state.heat > heat) new_dir = Direction::R;
+        //   if (local_mapping[{0,-1}].second->size() > 0 && local_mapping[{0,-1}].first->state.heat > heat) new_dir = Direction::L;
+        //   if (local_mapping[{1,0}].second->size() > 0 && local_mapping[{1,0}].first->state.heat > heat) new_dir = Direction::D;
+        //   if (local_mapping[{-1,0}].second->size() > 0 && local_mapping[{-1,0}].first->state.heat > heat) new_dir = Direction::U;
+        // }
       }
       else
       {

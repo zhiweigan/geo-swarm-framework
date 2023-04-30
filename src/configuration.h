@@ -34,7 +34,7 @@ public:
   // -----------------------------------
 
   void update_agent(int i);
-  void update_location(Location *loc, parlay::slice<int *, int *> agents, parlay::slice<AgentTransition *, AgentTransition *> transitions);
+  void update_location(LocalMapping &mapping, parlay::slice<int *, int *> agents, parlay::slice<AgentTransition *, AgentTransition *> transitions);
   bool is_finished();
   void print_config(int time = 0, int flags = 0);
 

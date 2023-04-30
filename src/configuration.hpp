@@ -160,7 +160,7 @@ Configuration<Map>::transition()
   auto update_start = std::chrono::high_resolution_clock::now();
   parlay::parallel_for(0, num_unique_locations, [&](int i)
   {
-    update_location(unique_vertices[i], getAgentsAtUniqueLocation(i), getAgentTransitionsAtUniqueLocation(i));
+    update_location(local_mappings[unique_vertices[i]->loc], getAgentsAtUniqueLocation(i), getAgentTransitionsAtUniqueLocation(i));
   });
   parlay::parallel_for(0, agent_ids.size(), [&](int i)
   { 

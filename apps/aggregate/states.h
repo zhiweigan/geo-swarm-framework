@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <string>
 #include <iostream>
+#include <atomic>
 #include <constants.h>
 #include <set>
 #include <map>
@@ -16,11 +17,13 @@ struct AggregateLocationState
     , heat(0)
     , count(0)
     , isWall(false)
+    , population(0)
   { }
   Position location;
   double heat;
   bool isWall;
   int count;
+  std::atomic<int>* population;
 };
 
 struct AggregateAgentState
