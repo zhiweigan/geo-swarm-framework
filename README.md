@@ -1,6 +1,6 @@
 # Geo Swarm Framework
 
-Introduction: TODO
+THIS PROJECT IS A WORK IN PROGRESS SCHEDULED TO BE FINISHED BY SEPTEMBER 2023
 
 ## How to: Build & Run
 ```bash
